@@ -1,0 +1,1243 @@
+<title>محاورہ میلہ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+/* Layout concept: a village fair in Pakistani truck-art colours. A map screen of nine stalls (tiles) leads to one stall at a time; each stall is a sticker-style card with thick outlines and hard shadows. */
+:root{
+  --bg:#E6F6F3; --dots:#CDEBE6; --card:#FFFFFF; --ink:#1E1450; --muted:#51498A; --edge:#1E1450;
+  --mari:#FFB703; --mag:#E5266E; --teal:#00A896; --red:#E63B2E; --vio:#5A3FD0; --sky:#2BA3F0;
+  --onacc:#1E1450; --onsat:#FFFFFF;
+  --soft-mari:#FFF0BF; --soft-mag:#FFE0EC; --soft-teal:#D3F5EF; --soft-vio:#E7E1FF; --soft-sky:#DCF1FF;
+  --good:#12A150; --bad:#D92D20; --write:#4630B8;
+  --sky1:#7FD6F5; --sky2:#EAF9FF; --cloud:#FFFFFF; --hill:#2FC4A8;
+  --font:"Jameel Noori Nastaleeq","Noto Nastaliq Urdu","Noto Naskh Arabic",serif;
+  --shadow:4px 4px 0 var(--edge);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#140E3A; --dots:#1D1650; --card:#261C63; --ink:#FFF3D1; --muted:#C7BFF2; --edge:#0A0624;
+    --soft-mari:#5B4608; --soft-mag:#5A1639; --soft-teal:#0B4D49; --soft-vio:#3A2C8C; --soft-sky:#123E66;
+    --good:#34D399; --bad:#FF7A70; --write:#C9BEFF;
+    --sky1:#1B1A66; --sky2:#5B3396; --cloud:#8E7BD0; --hill:#0F8F7E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#140E3A; --dots:#1D1650; --card:#261C63; --ink:#FFF3D1; --muted:#C7BFF2; --edge:#0A0624;
+  --soft-mari:#5B4608; --soft-mag:#5A1639; --soft-teal:#0B4D49; --soft-vio:#3A2C8C; --soft-sky:#123E66;
+  --good:#34D399; --bad:#FF7A70; --write:#C9BEFF;
+  --sky1:#1B1A66; --sky2:#5B3396; --cloud:#8E7BD0; --hill:#0F8F7E;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 40px;
+  background:var(--bg); background-image:radial-gradient(var(--dots) 2px,transparent 2.6px); background-size:30px 30px;
+  color:var(--ink); font-family:var(--font); font-size:20px; line-height:2.1; overflow-x:hidden;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(2.4rem,8vw,4.2rem);line-height:1.85;font-weight:700}
+h2{font-size:clamp(1.6rem,4.6vw,2.3rem);line-height:1.9;font-weight:700}
+h3{font-size:1.25rem;line-height:1.9;font-weight:700}
+mark{background:var(--mari);color:var(--onacc);padding:0 .3em .15em;border-radius:8px;font-weight:600}
+.wrap{max-width:1060px;margin:0 auto}
+.muted{color:var(--muted)}
+
+/* top bar */
+.topbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:20;margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--card);border:3px solid var(--edge);border-radius:999px;box-shadow:var(--shadow);padding:2px 14px 6px}
+.brand{font-weight:700;font-size:1.25rem;display:flex;align-items:center;gap:8px;margin-inline-end:auto;min-width:0}
+.brand svg{width:34px;height:34px;flex:none}
+.pill{display:inline-flex;align-items:center;gap:6px;border:3px solid var(--edge);border-radius:999px;padding:0 12px 4px;background:var(--soft-mari);font-weight:700;font-size:1rem;white-space:nowrap}
+.pill.rank{background:var(--soft-vio)}
+.ibtn{border:3px solid var(--edge);background:var(--card);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;cursor:pointer;font-size:1.1rem;line-height:1;padding:0}
+.ibtn:focus-visible,.btn:focus-visible,.opt:focus-visible,.tile:focus-visible,.fc:focus-visible,.tab:focus-visible,.bal:focus-visible,.blank:focus-visible,.w:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+
+/* buttons & cards */
+.btn{font-weight:700;padding:.1em 1.2em .42em;border:3px solid var(--edge);border-radius:999px;background:var(--mari);color:var(--onacc);box-shadow:0 4px 0 var(--edge);cursor:pointer;line-height:1.9;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.btn.alt{background:var(--card);color:var(--ink)}
+.btn.mag{background:var(--mag);color:var(--onsat)}
+.btn.teal{background:var(--teal);color:var(--onsat)}
+.btn.sm{font-size:.9rem}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.card{background:var(--card);border:3px solid var(--edge);border-radius:22px;box-shadow:var(--shadow);padding:.7rem 1.3rem 1rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.row.c{justify-content:center}
+.stack{display:flex;flex-direction:column;gap:16px}
+.view{padding-top:22px}
+.view[hidden]{display:none}
+.vhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.vhead h2{margin-inline-end:auto;min-width:0}
+.sub{color:var(--muted);font-size:1.02rem;line-height:2}
+
+/* fair band */
+.band{height:14px;border-radius:99px;border:3px solid var(--edge);background:repeating-linear-gradient(90deg,var(--mag) 0 26px,var(--mari) 26px 52px,var(--teal) 52px 78px,var(--vio) 78px 104px)}
+
+/* hero */
+.hero{border:3px solid var(--edge);border-radius:26px;overflow:hidden;box-shadow:var(--shadow);background:var(--sky2);line-height:0}
+.hero-art{width:100%;height:auto;display:block}
+.sk1{stop-color:var(--sky1)} .sk2{stop-color:var(--sky2)}
+.wheel{transform-origin:770px 165px;animation:spin 30s linear infinite}
+.flt{animation:flt 5s ease-in-out infinite}
+.flt.d2{animation-delay:-1.7s;animation-duration:6s}.flt.d3{animation-delay:-3.1s;animation-duration:4.4s}
+.sway{transform-origin:100px 190px;animation:sway 4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes flt{50%{transform:translateY(-10px)}}
+@keyframes sway{50%{transform:rotate(2.5deg)}}
+.intro{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;align-items:center;margin:22px 0}
+.intro h1{color:var(--ink)}
+.intro h1 span{color:var(--mag)}
+.intro .lead{font-size:1.18rem;color:var(--muted);line-height:2.1}
+@media (max-width:760px){.intro{grid-template-columns:1fr}}
+.welcome{background:var(--soft-mari)}
+.welcome input{flex:1 1 220px;min-width:0;border:3px solid var(--edge);border-radius:999px;background:var(--card);padding:0 18px 6px;line-height:2.1;font-size:1.1rem}
+.prog{height:16px;border-radius:99px;border:3px solid var(--edge);background:var(--card);overflow:hidden}
+.prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--mari));transition:width .5s}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin:20px 0 10px}
+.tile{--c:var(--vio);--s:var(--soft-vio);position:relative;text-align:start;cursor:pointer;background:var(--card);border:3px solid var(--edge);border-radius:24px;box-shadow:var(--shadow);padding:.2rem 1.1rem 1rem;display:flex;flex-direction:column;gap:2px;transition:transform .15s}
+.tile:nth-child(odd){transform:rotate(-.8deg)} .tile:nth-child(even){transform:rotate(.8deg)}
+.tile:hover{transform:rotate(0) translateY(-5px)}
+.tile .ico{width:76px;height:76px;border-radius:50%;background:var(--c);border:3px solid var(--edge);display:grid;place-items:center;font-size:2.3rem;line-height:1;margin-top:-30px;margin-bottom:4px;box-shadow:3px 3px 0 var(--edge)}
+.tile h3{font-size:1.28rem}
+.tile p{font-size:.98rem;color:var(--muted);line-height:1.95}
+.tile .st{margin-top:6px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.95rem;font-weight:600}
+.tile .num{position:absolute;top:10px;inset-inline-end:14px;font-size:1rem;background:var(--s);border:2px solid var(--edge);border-radius:99px;padding:0 10px 3px;line-height:1.8;font-weight:700}
+.tile .done{color:var(--good)}
+.tile.is-done{background:var(--s)}
+
+/* quiz */
+.qhead{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.art{font-size:3.4rem;line-height:1.4;text-align:center;animation:wob 3s ease-in-out infinite;filter:drop-shadow(0 4px 0 rgba(0,0,0,.12))}
+@keyframes wob{25%{transform:rotate(-4deg) scale(1.04)}75%{transform:rotate(4deg) scale(1.04)}}
+.qtext{font-size:1.3rem;line-height:2.3;text-align:center;margin:4px 0 10px}
+.gap{display:inline-block;min-width:7em;border-bottom:4px dashed var(--mag);margin-inline:.3em;height:1.6em;vertical-align:middle}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.opt{font-weight:600;font-size:1.1rem;padding:.05em 1em .4em;border:3px solid var(--edge);border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--edge);cursor:pointer;line-height:2.05;transition:transform .08s}
+.opt:hover:not([disabled]){background:var(--soft-mari)}
+.opt:active:not([disabled]){transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.opt.ok{background:var(--good);color:#fff;animation:bump .45s}
+.opt.no{background:var(--bad);color:#fff;opacity:.85;animation:shake .4s}
+.opt[disabled]{cursor:default}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes bump{40%{transform:scale(1.07)}}
+.fb{margin-top:12px;border:3px solid var(--edge);border-radius:16px;padding:.1rem 1rem .35rem;background:var(--soft-teal);font-size:1.05rem;line-height:2.1}
+.fb[hidden]{display:none}
+.res{text-align:center}
+.res .big{font-size:4rem;line-height:1.5}
+.stars{font-size:2.4rem;letter-spacing:6px;line-height:1.6}
+
+/* learn */
+.seg{display:inline-flex;border:3px solid var(--edge);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:transparent;cursor:pointer;padding:0 20px 6px;font-weight:700;line-height:2.1;font-size:1.05rem}
+.seg button[aria-pressed="true"]{background:var(--mag);color:#fff}
+.seg button.b[aria-pressed="true"]{background:var(--teal)}
+.stage{min-height:190px;display:grid;place-items:center;text-align:center;gap:4px;padding:6px 8px}
+.stage .art{font-size:4.2rem}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.rule h3{display:flex;align-items:center;gap:10px}
+.rule h3 b{background:var(--mari);color:var(--onacc);border:3px solid var(--edge);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;font-size:1.1rem;line-height:1;padding-top:4px;flex:none}
+.blocks{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.blk{border:3px solid var(--edge);border-radius:14px;padding:0 16px 6px;background:var(--soft-sky);cursor:pointer;font-weight:700;box-shadow:0 3px 0 var(--edge);font-size:1.15rem;line-height:2}
+.blk.on{background:var(--mari);color:var(--onacc)}
+.sel{display:flex;gap:8px;flex-wrap:wrap}
+.sel button{border:3px solid var(--edge);border-radius:99px;background:var(--card);cursor:pointer;padding:0 14px 5px;font-weight:600;font-size:.98rem;line-height:2}
+.sel button[aria-pressed="true"]{background:var(--vio);color:#fff}
+.sent{font-size:1.25rem;line-height:2.3;text-align:center;border:3px dashed var(--edge);border-radius:16px;padding:.2rem .8rem .5rem;margin-top:8px;background:var(--soft-vio)}
+
+/* cards gallery */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:3px solid var(--edge);background:var(--card);border-radius:99px;padding:0 16px 5px;font-weight:700;cursor:pointer;line-height:2.05;font-size:1rem;box-shadow:0 3px 0 var(--edge)}
+.tab[aria-pressed="true"]{background:var(--mag);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:20px}
+.fc{perspective:1100px;height:400px;cursor:pointer;border-radius:22px}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--edge);border-radius:22px;box-shadow:var(--shadow);padding:.6rem 1rem .8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;overflow:hidden}
+.front{background:var(--s,var(--soft-vio))}
+.front .art{font-size:3.6rem}
+.front h3{font-size:1.4rem;line-height:2.1}
+.front .hint{font-size:.9rem;color:var(--muted)}
+.back{transform:rotateY(180deg);background:var(--card);justify-content:flex-start;overflow-y:auto}
+.back .mean{font-size:1.25rem;font-weight:700;color:var(--mag);line-height:2.1}
+.back .lit{font-size:.9rem;color:var(--muted);line-height:2}
+.back .ex{font-size:1.02rem;line-height:2.15;border-top:3px dashed var(--edge);padding-top:6px;margin-top:2px}
+.learned-tag{position:absolute;top:8px;inset-inline-start:10px;font-size:1.4rem;line-height:1}
+
+/* match */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:640px){.mgrid{grid-template-columns:repeat(3,1fr)}}
+.mc{position:relative;height:132px;perspective:800px;cursor:pointer;border:0;background:none;padding:0}
+.mc-in{position:absolute;inset:0;transition:transform .45s;transform-style:preserve-3d}
+.mc.up .mc-in,.mc.ok .mc-in{transform:rotateY(180deg)}
+.mc .f,.mc .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--edge);border-radius:16px;display:grid;place-items:center;text-align:center;padding:2px 8px 6px;line-height:1.9;box-shadow:0 4px 0 var(--edge)}
+.mc .f{background:repeating-linear-gradient(45deg,var(--vio) 0 12px,var(--mag) 12px 24px);color:#fff;font-size:2rem}
+.mc .b{transform:rotateY(180deg);font-weight:700;font-size:1rem}
+.mc .b.m{background:var(--soft-mari)} .mc .b.d{background:var(--soft-teal)}
+.mc.ok .b{background:var(--good);color:#fff}
+
+/* balloons */
+.cloud{border:3px solid var(--edge);border-radius:30px;background:var(--soft-sky);padding:.3rem 1.2rem .7rem;text-align:center;font-size:1.35rem;font-weight:700;line-height:2.2}
+.hearts{font-size:1.5rem;letter-spacing:4px;line-height:1.6}
+.sky{display:flex;flex-wrap:wrap;gap:16px 22px;justify-content:center;padding:30px 6px 10px;min-height:260px}
+.bal{--bc:var(--mag);position:relative;width:148px;height:176px;border:3px solid var(--edge);border-radius:50% 50% 46% 46%/56% 56% 44% 44%;background:var(--bc);color:var(--onsat);cursor:pointer;display:grid;place-items:center;text-align:center;padding:10px 12px 20px;font-weight:700;font-size:1.02rem;line-height:1.85;animation:rise .8s cubic-bezier(.2,1.2,.4,1) both,flt 4.6s ease-in-out .9s infinite;box-shadow:inset -12px -10px 0 rgba(0,0,0,.14)}
+.bal::after{content:"";position:absolute;top:100%;left:50%;width:3px;height:34px;background:var(--edge);transform:translateX(-50%)}
+.bal::before{content:"";position:absolute;bottom:-9px;left:50%;border:8px solid transparent;border-bottom:10px solid var(--edge);border-top:0;transform:translateX(-50%)}
+.bal.b1{--bc:var(--mag)} .bal.b2{--bc:var(--teal)} .bal.b3{--bc:var(--vio)} .bal.b4{--bc:#E58A00}
+.bal.b2,.bal.b3{animation-delay:.1s,1s,0s}
+.bal.pop{animation:pop .4s forwards}
+.bal.wrong{animation:shake .4s;opacity:.4;pointer-events:none}
+@keyframes rise{from{transform:translateY(200px);opacity:0}}
+@keyframes pop{50%{transform:scale(1.25)}to{transform:scale(0);opacity:0}}
+
+/* builder */
+.slots{min-height:84px;display:flex;flex-wrap:wrap;gap:10px;padding:10px 12px 14px;border:3px dashed var(--edge);border-radius:18px;background:var(--soft-vio);align-items:center}
+.pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px;min-height:70px}
+.w{border:3px solid var(--edge);border-radius:14px;background:var(--mari);color:var(--onacc);font-weight:700;padding:0 16px 6px;cursor:pointer;box-shadow:0 4px 0 var(--edge);font-size:1.2rem;line-height:2.1}
+.slots .w{background:var(--card);color:var(--ink)}
+.slots.good{background:var(--soft-teal);border-style:solid;border-color:var(--good)}
+.slots.bad{animation:shake .4s}
+
+/* story */
+.story{font-size:1.32rem;line-height:2.9}
+.blank{border:0;border-bottom:4px dashed var(--mag);background:var(--soft-mag);border-radius:10px 10px 0 0;min-width:3.2em;padding:0 .5em .1em;margin-inline:.15em;cursor:pointer;font-weight:700;line-height:2.2;font-size:1em}
+.blank.cur{background:var(--mari);color:var(--onacc);border-color:var(--edge)}
+.blank.filled{background:var(--soft-teal);border-bottom:4px solid var(--good);cursor:default}
+.picker{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:10;margin-top:16px;background:var(--card);border:3px solid var(--edge);border-radius:20px;box-shadow:var(--shadow);padding:.1rem 1rem .9rem}
+
+/* worksheet */
+.paper{background:var(--card);border:3px solid var(--edge);border-radius:14px;box-shadow:var(--shadow);padding:.6rem 1.3rem 1.4rem}
+.paper .top{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:8px 0 6px}
+.fld{display:flex;flex-direction:column;font-size:.95rem;color:var(--muted);line-height:1.9}
+.fld input,.fld select{border:0;border-bottom:3px solid var(--edge);background:transparent;padding:0 4px 4px;font-size:1.1rem;color:var(--write);line-height:2.1;min-width:0}
+.sec{margin-top:26px}
+.sec h3{background:var(--soft-mari);border:3px solid var(--edge);border-radius:14px;padding:0 14px 5px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sec h3 small{font-size:.9rem;font-weight:600}
+.sec .ins{font-size:.98rem;color:var(--muted);margin:2px 0 6px;line-height:2}
+.bank{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.bank span{background:var(--soft-vio);border:2px solid var(--edge);border-radius:99px;padding:0 12px 4px;font-weight:600;font-size:1rem;line-height:2}
+.q{display:flex;gap:10px;align-items:baseline;padding:2px 0}
+.q>b{flex:none;color:var(--mag)}
+.q .qt{flex:1;min-width:0;font-size:1.12rem;line-height:2.5}
+.gapin{border:0;border-bottom:3px dashed var(--muted);background:transparent;color:var(--write);min-width:9em;width:min(15em,60%);padding:0 6px 4px;font-size:1.1rem;line-height:2.1;text-align:center}
+.ws-in,.ws-sel,.ws-ta{width:100%;border:0;border-bottom:3px dashed var(--muted);background:transparent;color:var(--write);padding:0 6px 4px;line-height:2.2;font-size:1.1rem;min-width:0}
+.ws-sel{border:3px solid var(--edge);border-radius:12px;background:var(--card);padding:0 8px 4px;width:auto;max-width:100%}
+.ws-ta{border:3px solid var(--edge);border-radius:14px;resize:vertical;padding:6px 12px 8px;line-height:2.4rem;background-image:repeating-linear-gradient(transparent 0 calc(2.4rem - 2px),var(--dots) calc(2.4rem - 2px) 2.4rem);background-attachment:local}
+.qb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:10px;align-items:start;padding:2px 0}
+@media (max-width:640px){.qb{grid-template-columns:1fr}.q{flex-wrap:wrap}}
+.counter{margin-top:8px;font-weight:600;font-size:1rem}
+.counter.okc{color:var(--good)}
+.dlbar{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:12;margin-top:22px;background:var(--card);border:3px solid var(--edge);border-radius:20px;box-shadow:var(--shadow);padding:.25rem 1rem .8rem}
+.msg{font-size:1rem;line-height:2;min-height:1.5em}
+
+/* helper mascot + toast + confetti */
+#helper{position:fixed;left:max(10px,env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:flex-end;gap:6px;pointer-events:none;transform:translateY(160%);transition:transform .35s cubic-bezier(.2,1.3,.4,1)}
+#helper.on{transform:none}
+#helper .mini{width:84px;height:84px;flex:none;animation:sway 2.4s ease-in-out infinite}
+#helper .bubble{background:var(--card);border:3px solid var(--edge);border-radius:18px 18px 18px 4px;box-shadow:3px 3px 0 var(--edge);padding:0 14px 6px;max-width:210px;font-weight:700;font-size:1rem;line-height:2.05;margin-bottom:34px}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.pts-pop{animation:bump .5s}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.foot{text-align:center;color:var(--muted);font-size:.95rem;margin-top:28px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="peacock" viewBox="0 0 200 200">
+      <g class="tail" stroke="#1E1450" stroke-width="3">
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#00A896" transform="rotate(-84 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#2BA3F0" transform="rotate(-63 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#00A896" transform="rotate(-42 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#2BA3F0" transform="rotate(-21 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#00A896"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#2BA3F0" transform="rotate(21 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#00A896" transform="rotate(42 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#2BA3F0" transform="rotate(63 100 134)"/>
+        <ellipse cx="100" cy="62" rx="15" ry="46" fill="#00A896" transform="rotate(84 100 134)"/>
+      </g>
+      <g stroke="#1E1450" stroke-width="2.5">
+        <g transform="rotate(-84 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(-63 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(-42 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(-21 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(21 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(42 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(63 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+        <g transform="rotate(84 100 134)"><circle cx="100" cy="32" r="9" fill="#FFB703"/><circle cx="100" cy="32" r="4.5" fill="#5A3FD0"/></g>
+      </g>
+      <path d="M90 170 L86 192 M110 170 L114 192 M80 193 H92 M108 193 H120" stroke="#E58A00" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <ellipse cx="100" cy="142" rx="27" ry="34" fill="#2A5BD7" stroke="#1E1450" stroke-width="3.5"/>
+      <ellipse cx="100" cy="150" rx="14" ry="22" fill="#5E8BFF" opacity=".55"/>
+      <circle cx="100" cy="98" r="19" fill="#2A5BD7" stroke="#1E1450" stroke-width="3.5"/>
+      <path d="M100 80 L92 60 M100 80 L100 56 M100 80 L108 60" stroke="#1E1450" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="92" cy="58" r="4.5" fill="#FFB703" stroke="#1E1450" stroke-width="2"/><circle cx="100" cy="54" r="4.5" fill="#FFB703" stroke="#1E1450" stroke-width="2"/><circle cx="108" cy="58" r="4.5" fill="#FFB703" stroke="#1E1450" stroke-width="2"/>
+      <circle cx="92" cy="94" r="6" fill="#fff"/><circle cx="108" cy="94" r="6" fill="#fff"/>
+      <circle cx="93" cy="95" r="3.2" fill="#1E1450"/><circle cx="107" cy="95" r="3.2" fill="#1E1450"/>
+      <path d="M93 102 L107 102 L100 115 Z" fill="#FFB703" stroke="#1E1450" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="83" cy="104" r="5" fill="#FF7BA9" opacity=".8"/><circle cx="117" cy="104" r="5" fill="#FF7BA9" opacity=".8"/>
+    </symbol>
+  </defs>
+</svg>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="helper" aria-live="polite">
+  <svg class="mini" viewBox="0 0 200 200" aria-hidden="true"><use href="#peacock"/></svg>
+  <div class="bubble"><span id="helperText"></span></div>
+</div>
+
+<div class="wrap" dir="rtl" lang="ur" id="app">
+
+  <header class="topbar">
+    <div class="brand"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#peacock"/></svg><span>محاورہ میلہ</span></div>
+    <span class="pill" id="hudPts" title="کل پوائنٹس">⭐ <span id="pts">۰</span></span>
+    <span class="pill rank" id="hudRank">🎟️ نیا مہمان</span>
+    <button class="ibtn" id="soundBtn" type="button" aria-label="آواز کھولیں یا بند کریں" aria-pressed="true">🔊</button>
+    <button class="ibtn" id="homeBtn" type="button" aria-label="میلے کے نقشے پر جائیں">🗺️</button>
+  </header>
+
+  <!-- ===== HOME ===== -->
+  <section class="view" id="v-home">
+    <div class="intro">
+      <div>
+        <h1>محاورہ <span>میلہ</span></h1>
+        <p class="lead">ساتویں جماعت کے لیے اردو کا سب سے رنگین سبق۔ اسٹال گھومیں، کھیل کھیلیں، پوائنٹس جمع کریں اور آخر میں اپنی ورک شیٹ لکھ کر ڈاؤن لوڈ کریں۔</p>
+      </div>
+      <div class="hero">
+        <svg class="hero-art" viewBox="0 0 900 330" role="img" aria-label="رنگ برنگا میلہ: خیمہ، جھولا، غبارے اور مور">
+          <defs>
+            <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="sk1"/><stop offset="1" class="sk2"/></linearGradient>
+            <pattern id="stripe" width="44" height="20" patternUnits="userSpaceOnUse"><rect width="22" height="20" fill="#E63B2E"/><rect x="22" width="22" height="20" fill="#FFF3D1"/></pattern>
+          </defs>
+          <rect width="900" height="330" fill="url(#skyg)"/>
+          <g fill="var(--cloud)" opacity=".85"><ellipse cx="170" cy="78" rx="52" ry="17"/><ellipse cx="205" cy="68" rx="34" ry="16"/><ellipse cx="610" cy="96" rx="48" ry="15"/><ellipse cx="640" cy="86" rx="30" ry="14"/></g>
+          <path d="M0 272 Q150 236 310 268 T620 262 T900 270 V330 H0Z" fill="var(--hill)" stroke="#1E1450" stroke-width="4"/>
+          <g id="bunt"></g>
+          <!-- ferris wheel -->
+          <path d="M770 165 L722 288 M770 165 L818 288" stroke="#1E1450" stroke-width="9" stroke-linecap="round"/>
+          <g class="wheel">
+            <circle cx="770" cy="165" r="92" fill="none" stroke="#1E1450" stroke-width="7"/>
+            <circle cx="770" cy="165" r="58" fill="none" stroke="#1E1450" stroke-width="4"/>
+            <path d="M678 165 H862 M770 73 V257 M705 100 L835 230 M705 230 L835 100" stroke="#1E1450" stroke-width="4"/>
+            <g stroke="#1E1450" stroke-width="3.5">
+              <circle cx="862" cy="165" r="13" fill="#E5266E"/><circle cx="835" cy="230" r="13" fill="#FFB703"/><circle cx="770" cy="257" r="13" fill="#00A896"/><circle cx="705" cy="230" r="13" fill="#5A3FD0"/>
+              <circle cx="678" cy="165" r="13" fill="#E5266E"/><circle cx="705" cy="100" r="13" fill="#FFB703"/><circle cx="770" cy="73" r="13" fill="#00A896"/><circle cx="835" cy="100" r="13" fill="#5A3FD0"/>
+            </g>
+          </g>
+          <circle cx="770" cy="165" r="11" fill="#FFB703" stroke="#1E1450" stroke-width="4"/>
+          <!-- tent -->
+          <rect x="335" y="150" width="230" height="122" fill="url(#stripe)" stroke="#1E1450" stroke-width="5"/>
+          <polygon points="318,152 450,70 582,152" fill="url(#stripe)" stroke="#1E1450" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M335 152 a19.17 19.17 0 0 0 38.33 0 a19.17 19.17 0 0 0 38.33 0 a19.17 19.17 0 0 0 38.33 0 a19.17 19.17 0 0 0 38.33 0 a19.17 19.17 0 0 0 38.33 0 a19.17 19.17 0 0 0 38.34 0" fill="#FFB703" stroke="#1E1450" stroke-width="4"/>
+          <path d="M416 272 V222 a34 34 0 0 1 68 0 V272 Z" fill="#2A1B6B" stroke="#1E1450" stroke-width="4"/>
+          <path d="M450 70 V32" stroke="#1E1450" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="450,32 486,44 450,56" fill="#E5266E" stroke="#1E1450" stroke-width="3" stroke-linejoin="round"/>
+          <rect x="378" y="112" width="144" height="46" rx="12" fill="#FFB703" stroke="#1E1450" stroke-width="4"/>
+          <text x="450" y="146" text-anchor="middle" font-size="25" font-weight="700" fill="#1E1450" style="font-family:var(--font)">محاورہ میلہ</text>
+          <!-- balloons -->
+          <g class="flt"><path d="M252 150 Q248 200 262 250" stroke="#1E1450" stroke-width="2.5" fill="none"/><ellipse cx="252" cy="126" rx="22" ry="28" fill="#E5266E" stroke="#1E1450" stroke-width="3.5"/><ellipse cx="244" cy="116" rx="5" ry="8" fill="#fff" opacity=".6"/></g>
+          <g class="flt d2"><path d="M288 124 Q292 190 262 250" stroke="#1E1450" stroke-width="2.5" fill="none"/><ellipse cx="288" cy="100" rx="21" ry="27" fill="#FFB703" stroke="#1E1450" stroke-width="3.5"/><ellipse cx="281" cy="91" rx="5" ry="8" fill="#fff" opacity=".6"/></g>
+          <g class="flt d3"><path d="M222 168 Q230 210 262 250" stroke="#1E1450" stroke-width="2.5" fill="none"/><ellipse cx="220" cy="144" rx="20" ry="26" fill="#5A3FD0" stroke="#1E1450" stroke-width="3.5"/><ellipse cx="213" cy="135" rx="5" ry="8" fill="#fff" opacity=".5"/></g>
+          <!-- peacock -->
+          <g class="sway"><use href="#peacock" x="12" y="130" width="200" height="200"/></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="band" aria-hidden="true"></div>
+
+    <div class="card welcome" id="welcome" style="margin-top:22px">
+      <h3 id="welcomeTitle">آپ کا نام کیا ہے؟</h3>
+      <form class="row" id="nameForm" autocomplete="off">
+        <label class="sr" for="nameIn">اپنا نام لکھیں</label>
+        <input id="nameIn" type="text" maxlength="40" placeholder="اپنا نام لکھیں" dir="rtl">
+        <button class="btn" type="submit">میلے میں داخل ہوں 🎟️</button>
+      </form>
+    </div>
+    <div id="greet" class="card" style="margin-top:22px" hidden>
+      <div class="row" style="justify-content:space-between">
+        <h3 id="greetText"></h3>
+        <span class="sub" id="progText"></span>
+      </div>
+      <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="9" id="prog"><i id="progBar" style="width:0"></i></div>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+
+    <p class="foot">
+      <button class="btn alt sm" id="resetBtn" type="button">نئے سرے سے شروع کریں</button>
+      <span id="resetMsg" class="msg"></span>
+    </p>
+  </section>
+
+  <!-- ===== 1 LEARN ===== -->
+  <section class="view" id="v-learn" hidden>
+    <div class="vhead"><h2>🎪 محاورہ کیا ہوتا ہے؟</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="stack">
+      <div class="card" style="background:var(--soft-mari)">
+        <p style="font-size:1.25rem;line-height:2.4">محاورہ وہ لفظ یا جملہ ہے جو اپنے <mark>اصل (لفظی) معنی</mark> چھوڑ کر کسی <mark>خاص معنی</mark> میں بولا جاتا ہے۔</p>
+        <p class="sub">یعنی لفظوں کا مطلب کچھ اور ہوتا ہے اور محاورے کا مطلب کچھ اور۔ آئیے ایک ہنسی کی مشین میں دیکھتے ہیں!</p>
+      </div>
+
+      <div class="card">
+        <h3>😂 ہنسی کی مشین</h3>
+        <p class="sub">جملہ پڑھیں، پھر دونوں بٹن دبا کر دیکھیں کہ لفظی معنی کتنے مزے دار ہوتے ہیں۔</p>
+        <div class="sent" id="demoSent"></div>
+        <div class="row c" style="margin:12px 0 4px">
+          <div class="seg" role="group" aria-label="معنی کی قسم">
+            <button type="button" id="demoLit" aria-pressed="true">😂 لفظی معنی</button>
+            <button type="button" class="b" id="demoReal" aria-pressed="false">💡 اصل معنی</button>
+          </div>
+        </div>
+        <div class="stage" id="demoStage"></div>
+        <div class="row c"><button class="btn alt sm" id="demoNext" type="button">اگلی مثال ⟵</button></div>
+      </div>
+
+      <h2>تین سنہری اصول</h2>
+      <div class="rules">
+        <div class="card rule">
+          <h3><b>۱</b> ٹکڑوں میں نہیں، پورا سمجھیں</h3>
+          <p class="sub">ہر ٹکڑے پر دبائیں اور دیکھیں کہ الگ الگ معنی نکالنے سے کیا بنتا ہے۔</p>
+          <div class="blocks" id="blocks"></div>
+          <div class="sent" id="blockSent" style="background:var(--soft-sky)">ٹکڑوں پر دبائیں 👆</div>
+          <div class="row c" style="margin-top:10px"><button class="btn teal sm" id="blockJoin" type="button">سب ملا کر پڑھیں</button></div>
+        </div>
+        <div class="card rule">
+          <h3><b>۲</b> جملے کے ساتھ فعل بدلتا ہے</h3>
+          <p class="sub">محاورہ <mark>بازی لے جانا</mark> کو مختلف جملوں میں بدل کر دیکھیں۔</p>
+          <div class="sub" style="margin-top:6px">کون؟</div>
+          <div class="sel" id="selWho"></div>
+          <div class="sub">کب؟</div>
+          <div class="sel" id="selWhen"></div>
+          <div class="sent" id="conjSent"></div>
+        </div>
+        <div class="card rule">
+          <h3><b>۳</b> کم لفظ، بڑی بات</h3>
+          <p class="sub">دونوں جملے پڑھیں۔ کون سا زیادہ مزے دار ہے؟</p>
+          <div class="row c"><div class="seg"><button type="button" id="cmpPlain" aria-pressed="true">عام جملہ</button><button type="button" class="b" id="cmpIdiom" aria-pressed="false">محاورے والا</button></div></div>
+          <div class="sent" id="cmpSent"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🎯 کیا آپ سمجھ گئے؟</h3>
+        <div id="quizLearn"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2 CARDS ===== -->
+  <section class="view" id="v-cards" hidden>
+    <div class="vhead"><h2>🃏 محاورہ گیلری</h2><span class="pill" id="learnedCount"></span><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <p class="sub" style="margin-bottom:12px">کارڈ پر دبائیں تو وہ پلٹے گا۔ پیچھے معنی اور نئی مثال ملے گی۔ سمجھ آ جائے تو «سیکھ لیا» دبائیں۔ ہر محاورے کے ۲ پوائنٹس!</p>
+    <div class="tabs" id="catTabs" role="group" aria-label="محاورات کے گروہ"></div>
+    <div class="grid" id="cardGrid"></div>
+  </section>
+
+  <!-- ===== 3 PICTURE ===== -->
+  <section class="view" id="v-picture" hidden>
+    <div class="vhead"><h2>🖼️ تصویر بولتی ہے</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="card"><div id="quizPicture"></div></div>
+  </section>
+
+  <!-- ===== 4 MATCH ===== -->
+  <section class="view" id="v-match" hidden>
+    <div class="vhead"><h2>🧩 جوڑی ملاؤ</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <p class="sub" style="margin-bottom:10px">ہر محاورے کی جوڑی اس کے معنی کے ساتھ ملائیں۔ دو کارڈ پلٹیں؛ جوڑی ٹھیک ہو تو کارڈ سبز ہو جائیں گے۔ کم چالوں میں جیتیں تو اضافی پوائنٹس!</p>
+    <div class="tabs" id="roundTabs"></div>
+    <div class="card">
+      <div class="qhead" style="margin-bottom:12px"><span class="pill" id="mMoves">چالیں: ۰</span><span class="pill" id="mPairs">جوڑیاں: ۰ / ۶</span></div>
+      <div class="mgrid" id="mGrid"></div>
+      <div id="mResult" class="fb" hidden></div>
+    </div>
+  </section>
+
+  <!-- ===== 5 BALLOON ===== -->
+  <section class="view" id="v-balloon" hidden>
+    <div class="vhead"><h2>🎈 غبارہ نشانہ</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="card"><div id="balGame"></div></div>
+  </section>
+
+  <!-- ===== 6 BUILDER ===== -->
+  <section class="view" id="v-builder" hidden>
+    <div class="vhead"><h2>🧱 لفظ جوڑو</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="card"><div id="bldGame"></div></div>
+  </section>
+
+  <!-- ===== 7 FILL ===== -->
+  <section class="view" id="v-fill" hidden>
+    <div class="vhead"><h2>✏️ خالی جگہ پُر کرو</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="card"><div id="quizFill"></div></div>
+  </section>
+
+  <!-- ===== 8 STORY ===== -->
+  <section class="view" id="v-story" hidden>
+    <div class="vhead"><h2>📖 نوری کا اسکول میلہ</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <div class="card">
+      <p class="sub">کہانی پڑھیں۔ ہر خالی خانے پر دبائیں اور نیچے سے صحیح محاورہ چنیں۔</p>
+      <div class="story" id="storyText"></div>
+      <div class="picker" id="picker" hidden>
+        <div class="sub" id="pickLabel"></div>
+        <div class="opts" id="pickOpts"></div>
+      </div>
+      <div id="storyDone" class="fb" hidden></div>
+    </div>
+  </section>
+
+  <!-- ===== 9 SHEET ===== -->
+  <section class="view" id="v-sheet" hidden>
+    <div class="vhead"><h2>📝 میری ورک شیٹ</h2><button class="btn alt sm" data-go="home" type="button">🗺️ نقشہ</button></div>
+    <p class="sub" style="margin-bottom:12px">اس صفحے پر ہی جوابات لکھیں۔ سب کچھ خود بخود محفوظ ہوتا رہتا ہے۔ آخر میں نیچے والا بٹن دبا کر اپنی مکمل ورک شیٹ PDF میں ڈاؤن لوڈ کریں۔ اردو لکھنے کے لیے اردو کی بورڈ استعمال کریں۔</p>
+    <div class="paper" id="paper"></div>
+    <div class="dlbar">
+      <div class="row c">
+        <button class="btn mag" id="dlBtn" type="button">⬇️ ورک شیٹ PDF میں ڈاؤن لوڈ کریں</button>
+        <button class="btn alt" id="docBtn" type="button">📄 Word فائل</button>
+        <button class="btn alt" id="copyBtn" type="button">📋 متن کاپی کریں</button>
+      </div>
+      <div class="msg" id="dlMsg" role="status" style="text-align:center"></div>
+    </div>
+  </section>
+
+</div>
+<script>
+const CATS=[
+ {k:'eye',t:'👁️ آنکھوں کا میلہ',s:'--soft-sky'},
+ {k:'brave',t:'💪 ہمت اور مدد',s:'--soft-mari'},
+ {k:'feel',t:'🎉 خوشی اور غم',s:'--soft-mag'},
+ {k:'wit',t:'🧠 عقل اور چالاکی',s:'--soft-teal'},
+ {k:'fight',t:'🔥 جھگڑا اور گڑبڑ',s:'--soft-vio'},
+ {k:'size',t:'📏 بڑھنا اور گھٹنا',s:'--soft-sky'}
+];
+const M=[
+ {id:1,c:'eye',m:'آنکھوں میں کھٹکنا',mean:'برا لگنا',art:'👁️📌',lit:'آنکھ میں کوئی کیل چبھ گئی!',ex:'کلاس میں ہر وقت شور مچانے والا لڑکا استاد کی [[آنکھوں میں کھٹکتا]] تھا۔'},
+ {id:2,c:'eye',m:'آنکھوں میں خاک ڈالنا',mean:'فریب دینا',art:'🏜️👁️',lit:'کسی کی آنکھ میں سچ مچ مٹی ڈال دی!',ex:'چور دکان دار کی [[آنکھوں میں خاک ڈال کر]] قیمتی گھڑی لے گیا۔'},
+ {id:3,c:'eye',m:'آنکھوں کا تارا ہونا',mean:'بہت لاڈلا ہونا',art:'👁️⭐',lit:'آنکھ کے اندر ایک ننھا ستارہ چمک رہا ہے!',ex:'ننھی عائشہ اپنے دادا جان کی [[آنکھوں کا تارا]] ہے۔'},
+ {id:4,c:'eye',m:'آنکھیں چرانا',mean:'نظریں نہ ملانا، شرمانا',art:'👀🎒',lit:'آنکھیں نکال کر بستے میں چھپا لیں!',ex:'کم نمبر آئے تو عمر ابو سے [[آنکھیں چرانے]] لگا۔'},
+ {id:5,c:'eye',m:'آنکھیں بچھانا',mean:'عزت کرنا، بڑے شوق سے استقبال کرنا',art:'👀🛏️',lit:'آنکھوں کا قالین بچھا دیا!',ex:'مہمان آئے تو سب گھر والوں نے ان کے لیے [[آنکھیں بچھا دیں]]۔'},
+ {id:6,c:'brave',m:'جان جوکھوں میں ڈالنا',mean:'اپنی جان کو خطرے میں ڈالنا',art:'🦸🔥',lit:'جان کو جوکھوں کی ٹوکری میں رکھ دیا!',ex:'فائر مین نے [[جان جوکھوں میں ڈال کر]] بچے کو جلتے گھر سے نکالا۔'},
+ {id:7,c:'brave',m:'جان میں جان آنا',mean:'تسلی ہونا، اطمینان ہو جانا',art:'🫀🫀',lit:'جان کے اندر ایک اور جان آ گئی!',ex:'ڈاکٹر نے بتایا کہ دادی جان خطرے سے باہر ہیں تو سب کی [[جان میں جان آئی]]۔'},
+ {id:8,c:'brave',m:'بیڑا اٹھانا',mean:'ذمہ لینا',art:'⛵🏋️',lit:'ہاتھوں پر پوری کشتی اٹھا لی!',ex:'ثنا نے اسکول کے باغ کو سرسبز بنانے کا [[بیڑا اٹھایا]]۔'},
+ {id:9,c:'brave',m:'اینٹ سے اینٹ بجانا',mean:'تباہ کر دینا',art:'🧱🥁🧱',lit:'دو اینٹوں کو ڈھول کی طرح بجا دیا!',ex:'ہمارے شاہینوں نے مخالف ٹیم کی [[اینٹ سے اینٹ بجا دی]]۔'},
+ {id:10,c:'brave',m:'ٹس سے مس نہ ہونا',mean:'ذرا نہ ہلنا',art:'🗿💪',lit:'پتھر کا بت کھڑا ہے، ہلتا ہی نہیں!',ex:'ہم نے لاکھ منت کی مگر ضدی بھائی [[ٹس سے مس نہ ہوا]]۔'},
+ {id:11,c:'brave',m:'آڑے آنا',mean:'مصیبت کے وقت مدد دینا',art:'🚧🙋',lit:'راستے میں آڑے ہو کر لیٹ گیا!',ex:'مصیبت میں سچا دوست ہمیشہ [[آڑے آتا]] ہے۔'},
+ {id:12,c:'brave',m:'بازی لے جانا',mean:'جیت جانا',art:'🏃🏆',lit:'پورا کھیل اٹھا کر گھر لے گیا!',ex:'تقریری مقابلے میں فاطمہ [[بازی لے گئی]]۔'},
+ {id:13,c:'feel',m:'شادیانے بجانا',mean:'خوش ہونا',art:'🥁🎺🎉',lit:'سچ مچ ڈھول اور بگل بجنے لگے!',ex:'پاکستان کے جیتنے پر پورے محلے نے [[شادیانے بجائے]]۔'},
+ {id:14,c:'feel',m:'آٹھ آٹھ آنسو رونا',mean:'بہت زیادہ رونا',art:'😭💧💧',lit:'آنسو گن گن کر آٹھ آٹھ کے گچھے بنا دیے!',ex:'پالتو طوطا گم ہوا تو بچی [[آٹھ آٹھ آنسو رونے]] لگی۔'},
+ {id:15,c:'feel',m:'ٹسوے بہانا',mean:'جھوٹ موٹ رونا',art:'🥲🎭',lit:'نقلی آنسوؤں کی نہر بہا دی!',ex:'نقل پکڑی گئی تو وہ [[ٹسوے بہانے]] لگا کہ شاید استاد معاف کر دیں۔'},
+ {id:16,c:'feel',m:'جنگل میں منگل ہونا',mean:'ویران جگہ پر رونق ہونا',art:'🌲🎪',lit:'جنگل میں منگل کا دن اتر آیا!',ex:'ہفتوں سے سنسان پارک میں میلہ لگا تو [[جنگل میں منگل ہو گیا]]۔'},
+ {id:17,c:'feel',m:'اپنا سا منہ لے کر رہ جانا',mean:'شرمندہ ہونا',art:'😳🤲',lit:'اپنا منہ ہاتھوں میں اٹھا لیا!',ex:'جھوٹی کہانی کا راز کھلا تو بلال [[اپنا سا منہ لے کر رہ گیا]]۔'},
+ {id:18,c:'wit',m:'باتوں میں آنا',mean:'فریب میں آنا',art:'🪤🗣️',lit:'باتوں کے اندر گھس کر پھنس گیا!',ex:'سادہ دل دکان دار ٹھگ کی میٹھی [[باتوں میں آ گیا]]۔'},
+ {id:19,c:'wit',m:'بال کی کھال اتارنا',mean:'بہت چھان بین کرنا',art:'🔬💇',lit:'ایک بال کا چھلکا اتار دیا!',ex:'استاد صاحب ہر جواب میں [[بال کی کھال اتارتے]] ہیں، اس لیے ہم خوب تیاری کرتے ہیں۔'},
+ {id:20,c:'wit',m:'آفت کا پرکالہ ہونا',mean:'بہت چالاک ہونا',art:'🌪️🧒',lit:'آفت کا ایک ٹکڑا کلاس میں بیٹھا ہے!',ex:'ہمارا چھوٹا بھائی تو [[آفت کا پرکالہ]] ہے، ہر بار کوئی نہ کوئی ترکیب نکال لیتا ہے۔'},
+ {id:21,c:'wit',m:'پھونک پھونک کر قدم رکھنا',mean:'بہت احتیاط سے چلنا یا کام کرنا',art:'😮‍💨👣',lit:'ہر قدم پر پھونک مار کر پاؤں رکھا!',ex:'اندھیری سیڑھیوں پر اسد [[پھونک پھونک کر قدم رکھ]] رہا تھا۔'},
+ {id:22,c:'wit',m:'بھانڈا پھوڑنا',mean:'بھید ظاہر کرنا',art:'🏺💥',lit:'مٹی کا برتن زمین پر مار کر توڑ دیا!',ex:'چھوٹی بہن نے تحفے کا [[بھانڈا پھوڑ دیا]] اور سرپرائز خراب ہو گیا۔'},
+ {id:23,c:'fight',m:'جلتی پر تیل ڈالنا',mean:'جھگڑے کو بڑھانا',art:'🔥🛢️',lit:'آگ پر سچ مچ تیل انڈیل دیا!',ex:'دونوں دوست بحث کر رہے تھے کہ تیسرے نے طعنہ دے کر [[جلتی پر تیل ڈال دیا]]۔'},
+ {id:24,c:'fight',m:'تین پانچ کرنا',mean:'جھگڑا کرنا، تکرار کرنا، فریب دینا',art:'3️⃣⚔️5️⃣',lit:'تین اور پانچ آپس میں لڑ پڑے!',ex:'ذرا سی بات پر [[تین پانچ]] مت کیا کرو۔'},
+ {id:25,c:'fight',m:'الٹی گنگا بہانا',mean:'رواج یا دستور کے خلاف کام کرنا',art:'🏞️🔄',lit:'دریا الٹا بہنے لگا!',ex:'سب قطار میں کھڑے تھے مگر وہ سب کو دھکیل کر آگے نکل گیا، یہ تو [[الٹی گنگا بہانا]] ہوا۔'},
+ {id:26,c:'size',m:'پروان چڑھنا',mean:'جوان ہونا',art:'🌱🌳',lit:'پودا سیڑھی پر چڑھ رہا ہے!',ex:'ماں کی دعاؤں کے سائے میں بچے [[پروان چڑھتے]] ہیں۔'},
+ {id:27,c:'size',m:'آٹے میں نمک کے برابر ہونا',mean:'بہت کم ہونا',art:'🌾🧂',lit:'آٹے کے ڈھیر میں ذرا سا نمک!',ex:'ہماری جماعت میں شرارتی بچے [[آٹے میں نمک کے برابر]] ہیں۔'},
+ {id:28,c:'size',m:'آسمان سے باتیں کرنا',mean:'بہت بلند ہونا',art:'🏢☁️',lit:'عمارت بادلوں سے گپ شپ کر رہی ہے!',ex:'یہ نئی عمارت [[آسمان سے باتیں کرتی]] ہے۔'}
+];
+const BY={}; M.forEach(x=>BY[x.id]=x);
+const DEMO=[
+ {id:3,sent:'دادا جان کی پوتی ان کی [[آنکھوں کا تارا]] ہے۔',art2:'👴💖👧'},
+ {id:28,sent:'شہر کی نئی عمارت [[آسمان سے باتیں کرتی]] ہے۔',art2:'🏙️🤩'},
+ {id:23,sent:'اس نے طعنہ دے کر [[جلتی پر تیل ڈال دیا]]۔',art2:'😡🔥'},
+ {id:27,sent:'ہماری جماعت میں شرارتی بچے [[آٹے میں نمک کے برابر]] ہیں۔',art2:'🌾🤏'}
+];
+const PIC=[
+ {art:'🗣️🔥🛢️',s:'دو دوست ہلکی سی بحث کر رہے تھے۔ تیسرے نے طعنہ دیا اور بحث لڑائی بن گئی۔',a:23,d:[24,9,25]},
+ {art:'👴👧⭐💖',s:'دادا جان کو اپنی ننھی پوتی سب سے زیادہ پیاری لگتی ہے۔',a:3,d:[4,5,1]},
+ {art:'🏙️🏢☁️',s:'یہ نئی عمارت اتنی اونچی ہے کہ بادلوں کو چھو رہی ہے۔',a:28,d:[27,26,16]},
+ {art:'🌑🪜👣',s:'اندھیری سیڑھیوں پر وہ ہر قدم دیکھ بھال کر رکھ رہا تھا۔',a:21,d:[10,6,17]},
+ {art:'🙋‍♀️🌳🌱',s:'ثنا بولی: «پودے لگانے کی پوری ذمہ داری میری ہے!»',a:8,d:[11,22,12]},
+ {art:'🤥😳🤷',s:'جھوٹ پکڑا گیا تو بلال کے پاس کہنے کو کچھ نہ رہا اور وہ شرمندہ کھڑا رہ گیا۔',a:17,d:[15,4,18]},
+ {art:'🐘🗿💪',s:'سب نے پورا زور لگایا مگر بھاری پتھر ذرا بھی نہ ہلا۔',a:10,d:[11,9,2]},
+ {art:'🥁🎺🎊🏆',s:'ٹیم جیتی تو لوگ ڈھول بجا کر خوشی منانے لگے۔',a:13,d:[14,16,12]}
+];
+const FILL=[
+ {s:'ہمارے گاؤں کے لوگ مہمانوں کے لیے ہمیشہ ____ رہتے ہیں۔',a:'آنکھیں بچھائے',o:['آنکھیں چراتے','آنکھوں میں کھٹکتے','آنکھوں میں خاک ڈالتے'],id:5,art:'🏡👋'},
+ {s:'آخری گیند پر چھکا لگا کر سلمان ____۔',a:'بازی لے گیا',o:['بازی لے گئی','ٹس سے مس نہ ہوا','بھانڈا پھوڑ دیا'],id:12,art:'🏏🏆'},
+ {s:'راز رکھنے کا وعدہ کیا تھا مگر چھوٹے بھائی نے سب کے سامنے ____۔',a:'بھانڈا پھوڑ دیا',o:['بیڑا اٹھا لیا','بال کی کھال اتار دی','جان جوکھوں میں ڈال دی'],id:22,art:'🤫🏺'},
+ {s:'سیلاب آیا تو فوج کے جوان ہماری مدد کو ____۔',a:'آڑے آئے',o:['آنکھیں چرا گئے','ٹسوے بہانے لگے','الٹی گنگا بہا گئے'],id:11,art:'🚁🌊'},
+ {s:'کوہ پیما نے چوٹی سر کرنے کے لیے ____۔',a:'جان جوکھوں میں ڈالی',o:['جان میں جان آئی','اپنا سا منہ لے لیا','آٹھ آٹھ آنسو رو دی'],id:6,art:'🧗⛰️'},
+ {s:'ہوم ورک نہ کرنے پر فریدہ نے خوب ____ مگر استاد سمجھ گئے۔',a:'ٹسوے بہائے',o:['شادیانے بجائے','بازی لے لی','آنکھیں بچھائیں'],id:15,art:'😢📚'},
+ {s:'ویران سڑک پر ٹھیلے لگے تو ____۔',a:'جنگل میں منگل ہو گیا',o:['آٹے میں نمک کے برابر ہو گیا','اینٹ سے اینٹ بج گئی','جلتی پر تیل پڑ گیا'],id:16,art:'🛣️🛒'},
+ {s:'ننھا شہزاد ٹھگ کی میٹھی میٹھی ____ اور اپنا بستہ دے بیٹھا۔',a:'باتوں میں آ گیا',o:['آسمان سے باتیں کرنے لگا','پھونک پھونک کر قدم رکھنے لگا','بیڑا اٹھا بیٹھا'],id:18,art:'🧒🎒'}
+];
+const BUILD=[21,14,7,19,3,9,27];
+const ROUNDS=[[1,2,3,4,5,12],[6,7,8,9,10,11],[13,14,15,16,17,26],[18,19,20,21,22,23],[24,25,27,28,19,23]];
+const STORY={
+ t:'سالانہ اسکول میلے کا اعلان ہوا تو پورے اسکول میں خوشی کی لہر دوڑ گئی۔ برسوں سے خاموش پڑے میدان میں جھولے اور اسٹال لگے تو ایسا لگا جیسے [[1]]۔ ساتویں جماعت کی طرف سے سجاوٹ کا کام کسی کو سونپنا تھا۔ نوری نے ہاتھ کھڑا کیا اور یہ کام کرنے کا [[2]]۔ ارحم اونچی سیڑھی پر جھنڈیاں لگانے چڑھا تو گرنے کے ڈر سے [[3]]۔ نیچے کھڑے دو لڑکے رنگوں پر بحث کر رہے تھے کہ ایک تیسرے لڑکے نے مذاق اڑا کر [[4]]۔ نوری فوراً بیچ میں [[5]] اور سب کو مل جل کر کام کرنے پر راضی کر لیا۔ میلے کے دن جب ججوں نے سجاوٹ دیکھی تو ہماری جماعت [[6]]۔ دوسری جماعتیں [[7]] اور ہم سب نے خوشی سے [[8]]۔',
+ b:[
+  {a:'جنگل میں منگل ہو گیا ہو',o:['آنکھوں میں خاک ڈال دی ہو','الٹی گنگا بہہ رہی ہو','تین پانچ کیے جا رہے ہوں']},
+  {a:'بیڑا اٹھایا',o:['ٹسوے بہائے','بھانڈا پھوڑا','آنکھیں چرائیں']},
+  {a:'پھونک پھونک کر قدم رکھنے لگا',o:['آسمان سے باتیں کرنے لگا','آٹھ آٹھ آنسو رونے لگا','شادیانے بجانے لگا']},
+  {a:'جلتی پر تیل ڈال دیا',o:['اینٹ سے اینٹ بجا دی','بازی لے لی','آنکھیں بچھا دیں']},
+  {a:'آڑے آئی',o:['آنکھوں میں کھٹکی','ٹس سے مس نہ ہوئی','باتوں میں آ گئی']},
+  {a:'بازی لے گئی',o:['اپنا سا منہ لے کر رہ گئی','بال کی کھال اتارنے لگی','آٹے میں نمک کے برابر رہی']},
+  {a:'اپنا سا منہ لے کر رہ گئیں',o:['پروان چڑھ گئیں','جان جوکھوں میں ڈال بیٹھیں','شادیانے بجانے لگیں']},
+  {a:'شادیانے بجائے',o:['ٹسوے بہائے','آنکھیں چرائیں','بھانڈا پھوڑا']}
+ ]
+};
+const SENTENCE_WHO=[{n:'علی',g:'m'},{n:'سارہ',g:'f'},{n:'ہم سب',g:'p'}];
+const WHEN=[{k:'past',t:'گزرا ہوا کل',c:'کل مقابلے میں'},{k:'pres',t:'ہر بار',c:'ہر مقابلے میں'},{k:'fut',t:'آنے والا کل',c:'کل کے مقابلے میں'}];
+const CONJ={m:{past:'لے گیا',pres:'لے جاتا ہے',fut:'لے جائے گا'},f:{past:'لے گئی',pres:'لے جاتی ہے',fut:'لے جائے گی'},p:{past:'لے گئے',pres:'لے جاتے ہیں',fut:'لے جائیں گے'}};
+const RANKS=[[0,'🎟️ نیا مہمان'],[120,'📘 محاورہ طالب'],[300,'🏅 محاورہ ماہر'],[450,'🏆 چیمپئن'],[560,'👑 محاوروں کا ستارہ']];
+const STALLS=[
+ {k:'learn',t:'محاورہ کیا ہے؟',d:'ہنسی کی مشین اور تین سنہری اصول',i:'🎪',c:'--vio',s:'--soft-vio'},
+ {k:'cards',t:'محاورہ گیلری',d:'۲۸ کارڈ پلٹیں، معنی اور مثال دیکھیں',i:'🃏',c:'--mag',s:'--soft-mag'},
+ {k:'picture',t:'تصویر بولتی ہے',d:'تصویر دیکھیں، محاورہ پہچانیں',i:'🖼️',c:'--teal',s:'--soft-teal'},
+ {k:'match',t:'جوڑی ملاؤ',d:'کارڈ پلٹیں، معنی کی جوڑی ڈھونڈیں',i:'🧩',c:'--mari',s:'--soft-mari'},
+ {k:'balloon',t:'غبارہ نشانہ',d:'صحیح محاورے والا غبارہ پھوڑیں',i:'🎈',c:'--red',s:'--soft-mag'},
+ {k:'builder',t:'لفظ جوڑو',d:'بکھرے الفاظ کو ترتیب دیں',i:'🧱',c:'--sky',s:'--soft-sky'},
+ {k:'fill',t:'خالی جگہ پُر کرو',d:'جملے میں صحیح شکل بھریں',i:'✏️',c:'--vio',s:'--soft-vio'},
+ {k:'story',t:'نوری کا اسکول میلہ',d:'کہانی میں محاورے بھریں',i:'📖',c:'--mag',s:'--soft-mag'},
+ {k:'sheet',t:'میری ورک شیٹ',d:'لکھیں اور Word میں ڈاؤن لوڈ کریں',i:'📝',c:'--teal',s:'--soft-teal'}
+];
+const WS=[
+ {k:'A',t:'الف) خالی جگہ پُر کریں',marks:6,ins:'نیچے دیے گئے محاوروں میں سے مناسب محاورہ، جملے کے مطابق صحیح شکل میں لکھیں۔',bank:['آنکھیں چرانا','جان میں جان آنا','بال کی کھال اتارنا','الٹی گنگا بہانا','ٹس سے مس نہ ہونا','شادیانے بجانا'],type:'gap',qs:[
+  'ٹوٹا ہوا گلدان دیکھ کر بچہ امی سے ____ لگا۔',
+  'گمشدہ بچہ مل گیا تو ماں کی ____۔',
+  'ہمارے ریاضی کے استاد ہر حل پر ____ ہیں۔',
+  'قطار توڑ کر آگے نکلنے والے نے تو ____۔',
+  'سب نے منت کی مگر وہ اپنی بات سے ____۔',
+  'ہاکی ٹیم کے جیت کر لوٹنے پر لوگوں نے ____۔']},
+ {k:'B',t:'ب) جوڑی بنائیں',marks:6,ins:'ہر محاورے کے سامنے صحیح معنی منتخب کریں۔',type:'match',
+  pairs:[['آنکھوں میں خاک ڈالنا','فریب دینا'],['بیڑا اٹھانا','ذمہ لینا'],['جلتی پر تیل ڈالنا','جھگڑے کو بڑھانا'],['جنگل میں منگل ہونا','ویران جگہ پر رونق ہونا'],['آٹے میں نمک کے برابر ہونا','بہت کم ہونا'],['آسمان سے باتیں کرنا','بہت بلند ہونا']]},
+ {k:'C',t:'ج) معنی اپنے لفظوں میں لکھیں',marks:5,ins:'ہر محاورے کا مطلب اپنے الفاظ میں لکھیں۔',type:'line',qs:['ٹسوے بہانا','اینٹ سے اینٹ بجانا','آفت کا پرکالہ ہونا','پھونک پھونک کر قدم رکھنا','پروان چڑھنا']},
+ {k:'D',t:'د) اپنے جملے بنائیں',marks:10,ins:'ہر محاورے کو ایسے جملے میں استعمال کریں جو آپ نے خود سوچا ہو۔ ہر جملے کے ۲ نمبر ہیں۔',type:'area',qs:['آنکھیں بچھانا','جان جوکھوں میں ڈالنا','باتوں میں آنا','بھانڈا پھوڑنا','آڑے آنا']},
+ {k:'E',t:'ہ) صحیح یا غلط',marks:5,ins:'ہر بیان پڑھ کر «صحیح» یا «غلط» منتخب کریں۔',type:'tf',qs:[
+  'محاورے کو لفظ بہ لفظ ترجمہ کر کے سمجھا جا سکتا ہے۔',
+  'محاورہ جملے کو خوب صورت اور پراثر بناتا ہے۔',
+  '«آنکھوں کا تارا» کا مطلب آنکھ میں ستارہ گر جانا ہے۔',
+  'جملے کے مطابق محاورے کے فعل کی شکل بدل جاتی ہے، جیسے «بازی لے گیا / لے گئی»۔',
+  '«ٹسوے بہانا» کا مطلب سچے دل سے رونا ہے۔']},
+ {k:'F',t:'و) کہانی لکھیں',marks:8,ins:'«ایک دن اسکول میں» کے عنوان سے پانچ سے چھ جملوں کی چھوٹی کہانی لکھیں جس میں کم از کم تین محاورے ہوں۔',type:'story'},
+ {k:'G',t:'ز) اضافی سرگرمی: مضحکہ خیز تصویر',marks:5,ins:'کوئی ایک محاورہ چنیں اور بتائیں کہ اس کے لفظی معنی کی مزے دار تصویر میں کیا نظر آئے گا۔',type:'draw',bonus:true}
+];
+const STEMS=['آنکھوں میں کھٹک','آنکھوں میں خاک','آنکھوں کا تارا','آنکھیں چرا','آنکھیں بچھا','جان جوکھوں','جان میں جان','بیڑا اٹھا','اینٹ سے اینٹ','ٹس سے مس','آڑے آ','بازی لے','شادیانے','آٹھ آٹھ آنسو','ٹسوے','جنگل میں منگل','اپنا سا منہ','باتوں میں آ','بال کی کھال','آفت کا پرکالہ','پھونک پھونک','بھانڈا','جلتی پر تیل','تین پانچ','الٹی گنگا','پروان چڑھ','آٹے میں نمک','آسمان سے باتیں'];
+
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const DG='۰۱۲۳۴۵۶۷۸۹', ur=n=>String(n).replace(/\d/g,d=>DG[d]);
+const hl=s=>s.replace(/\[\[(.+?)\]\]/g,'<mark>$1</mark>');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tv=n=>getComputedStyle(document.documentElement).getPropertyValue(n);
+
+/* ---------- state ---------- */
+const KEY='muhawra-mela-v1';
+let S={name:'',learned:[],best:{},done:{},mr:[],ws:{}};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const total=()=>S.learned.length*2+Object.values(S.best).reduce((a,b)=>a+b,0);
+const rank=()=>{let r=RANKS[0][1];RANKS.forEach(x=>{if(total()>=x[0])r=x[1];});return r;};
+function hud(){$('#pts').textContent=ur(total());$('#hudRank').textContent=rank();renderHome();}
+function bump(g,sc){if(sc>(S.best[g]||0)){S.best[g]=sc;const p=$('#hudPts');p.classList.remove('pts-pop');void p.offsetWidth;p.classList.add('pts-pop');}save();hud();}
+function finish(g){if(!S.done[g]){S.done[g]=true;}save();hud();}
+
+/* ---------- sound / confetti / helper ---------- */
+let AC=null,MUTE=false;
+function tone(f,d,type,v,delay){if(MUTE)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.value=f;o.connect(g);g.connect(AC.destination);const t=AC.currentTime+(delay||0);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.start(t);o.stop(t+d);}catch(e){}}
+const sfx={ok(){tone(660,.14,'triangle',.12);tone(880,.22,'triangle',.12,.12);},no(){tone(170,.28,'sawtooth',.07);},win(){[523,659,784,1047].forEach((f,i)=>tone(f,.25,'triangle',.12,i*.12));},pop(){tone(320,.08,'square',.05);tone(540,.1,'square',.05,.05);},flip(){tone(420,.06,'sine',.07);}};
+$('#soundBtn').addEventListener('click',e=>{MUTE=!MUTE;e.currentTarget.textContent=MUTE?'🔇':'🔊';e.currentTarget.setAttribute('aria-pressed',String(!MUTE));});
+const cv=$('#confetti'),cx=cv.getContext('2d');let parts=[],raf=0;
+function confetti(n){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  cv.width=innerWidth;cv.height=innerHeight;
+  const cols=['#E5266E','#FFB703','#00A896','#5A3FD0','#2BA3F0','#E63B2E'];
+  for(let i=0;i<(n||90);i++)parts.push({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,w:6+Math.random()*7,h:8+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[i%cols.length],l:90+Math.random()*50});
+  if(!raf)tick();
+}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l-->0);parts.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/30);cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore();});raf=parts.length?requestAnimationFrame(tick):0;if(!raf)cx.clearRect(0,0,cv.width,cv.height);}
+let sayT;
+function say(t){$('#helperText').textContent=t;const h=$('#helper');h.classList.add('on');clearTimeout(sayT);sayT=setTimeout(()=>h.classList.remove('on'),3600);}
+const CHEER=['شاباش!','واہ، کیا بات ہے!','زبردست!','ماشاءاللہ، بالکل ٹھیک!','آپ تو محاورہ ماہر ہیں!'];
+const OOPS=['کوئی بات نہیں، دوبارہ سوچیں۔','تھوڑا اور غور کریں۔','قریب ہیں، ایک بار اور!'];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const good=()=>{sfx.ok();say(pick(CHEER));};
+const bad=()=>{sfx.no();say(pick(OOPS));};
+
+/* ---------- router ---------- */
+const NAMES=['home',...STALLS.map(s=>s.k)];
+const inited={};
+function show(n,noHash){
+  if(!NAMES.includes(n))n='home';
+  $$('.view').forEach(v=>v.hidden=true);
+  $('#v-'+n).hidden=false;
+  if(!noHash&&location.hash!=='#'+n){try{history.replaceState(null,'','#'+n);}catch(e){location.hash=n;}}
+  window.scrollTo(0,0);
+  if(!inited[n]){inited[n]=true;(INIT[n]||(()=>{}))();}
+  else if(RESHOW[n])RESHOW[n]();
+}
+addEventListener('hashchange',()=>show(location.hash.slice(1),true));
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)show(g.dataset.go);});
+$('#homeBtn').addEventListener('click',()=>show('home'));
+
+/* ---------- home ---------- */
+function renderHome(){
+  const has=!!S.name;
+  $('#welcome').hidden=has;$('#greet').hidden=!has;
+  if(has){
+    $('#greetText').textContent='خوش آمدید، '+S.name+'! نو اسٹال آپ کے منتظر ہیں۔';
+    const n=STALLS.filter(s=>S.done[s.k]).length;
+    $('#progText').textContent='مکمل اسٹال: '+ur(n)+' / '+ur(STALLS.length);
+    $('#progBar').style.width=(n/STALLS.length*100)+'%';
+    $('#prog').setAttribute('aria-valuenow',n);
+  }
+  const box=$('#tiles');box.innerHTML='';
+  STALLS.forEach((s,i)=>{
+    const b=el('button','tile'+(S.done[s.k]?' is-done':''));b.type='button';
+    b.style.setProperty('--c','var('+s.c+')');b.style.setProperty('--s','var('+s.s+')');
+    const sc=s.k==='cards'?S.learned.length*2:(S.best[s.k]||0);
+    b.innerHTML='<span class="num">'+ur(i+1)+'</span><span class="ico" aria-hidden="true">'+s.i+'</span><h3>'+s.t+'</h3><p>'+s.d+'</p><div class="st"><span class="'+(S.done[s.k]?'done':'muted')+'">'+(S.done[s.k]?'✔ مکمل':'ابھی باقی')+'</span><span>⭐ '+ur(sc)+'</span></div>';
+    b.addEventListener('click',()=>show(s.k));box.appendChild(b);
+  });
+}
+$('#nameForm').addEventListener('submit',e=>{
+  e.preventDefault();const v=$('#nameIn').value.trim();if(!v){$('#nameIn').focus();return;}
+  S.name=v;save();hud();sfx.win();confetti(70);say('خوش آمدید '+v+'!');
+});
+$('#nameIn').value=S.name||'';
+let rs=0;
+$('#resetBtn').addEventListener('click',()=>{
+  if(!rs){rs=1;$('#resetBtn').textContent='ہاں، سب کچھ مٹا دیں';$('#resetMsg').textContent=' پوائنٹس اور ورک شیٹ دونوں مٹ جائیں گے۔';setTimeout(()=>{rs=0;$('#resetBtn').textContent='نئے سرے سے شروع کریں';$('#resetMsg').textContent='';},5000);return;}
+  try{localStorage.removeItem(KEY);}catch(e){}
+  location.reload();
+});
+
+/* ---------- generic quiz ---------- */
+function quiz(box,items,cfg){
+  let i=0,score=0,mis=0,stars;
+  const render=()=>{
+    const it=items[i];mis=0;box.innerHTML='';
+    const h=el('div','qhead');
+    h.innerHTML='<span class="pill">سوال '+ur(i+1)+' / '+ur(items.length)+'</span><span class="pill">⭐ '+ur(score)+'</span>';
+    box.appendChild(h);
+    if(it.art)box.appendChild(el('div','art',it.art));
+    const q=el('div','qtext',it.q);box.appendChild(q);
+    const o=el('div','opts');
+    shuffle(it.o).forEach(op=>{
+      const b=el('button','opt',esc(op.t));b.type='button';
+      b.addEventListener('click',()=>{
+        if(op.ok){
+          $$('.opt',o).forEach(x=>x.disabled=true);b.classList.add('ok');
+          const gain=mis===0?cfg.per:mis===1?cfg.per/2:0;score+=gain;cfg.bump(score);
+          if(it.after)q.innerHTML=it.after;
+          good();
+          fb.innerHTML=(gain?'<b>+'+ur(gain)+' ⭐</b> ':'')+it.ex;fb.hidden=false;
+          nx.hidden=false;nx.focus({preventScroll:true});
+        }else{
+          mis++;b.disabled=true;b.classList.add('no');bad();
+        }
+      });
+      o.appendChild(b);
+    });
+    box.appendChild(o);
+    const fb=el('div','fb');fb.hidden=true;box.appendChild(fb);
+    const nx=el('button','btn',i<items.length-1?'اگلا سوال ⟵':'نتیجہ دیکھیں 🏁');nx.type='button';nx.hidden=true;
+    nx.addEventListener('click',()=>{i++;i<items.length?render():end();});
+    const r=el('div','row c');r.style.marginTop='14px';r.appendChild(nx);box.appendChild(r);
+  };
+  const end=()=>{
+    const max=items.length*cfg.per;const p=score/max;stars=p>=.9?3:p>=.6?2:1;
+    cfg.finish();sfx.win();confetti(110);
+    box.innerHTML='<div class="res"><div class="big">'+(stars===3?'🏆':stars===2?'🥈':'🥉')+'</div><div class="stars" aria-label="'+ur(stars)+' ستارے">'+'⭐'.repeat(stars)+'<span style="opacity:.25">'+'⭐'.repeat(3-stars)+'</span></div><h3>آپ کے پوائنٹس: '+ur(score)+' / '+ur(max)+'</h3><p class="sub">'+(stars===3?'ماشاءاللہ! آپ تو محاورہ ماہر ہیں۔':stars===2?'بہت خوب! ایک بار اور کھیلیں تو پورے پوائنٹس مل سکتے ہیں۔':'اچھی کوشش! گیلری میں کارڈ دیکھ کر دوبارہ کھیلیں۔')+'</p></div>';
+    const r=el('div','row c');r.style.marginTop='12px';
+    const a=el('button','btn','🔁 دوبارہ کھیلیں');a.type='button';a.onclick=()=>{i=0;score=0;items=cfg.rebuild?cfg.rebuild():items;render();};
+    const b=el('button','btn alt','🗺️ نقشہ');b.type='button';b.onclick=()=>show('home');
+    r.append(a,b);box.appendChild(r);
+  };
+  render();
+}
+
+/* ---------- 1 learn ---------- */
+const INIT={};const RESHOW={};
+INIT.learn=function(){
+  let di=0,real=false;
+  const sent=$('#demoSent'),stage=$('#demoStage'),bL=$('#demoLit'),bR=$('#demoReal');
+  const drawDemo=()=>{
+    const d=DEMO[di],m=BY[d.id];
+    sent.innerHTML=hl(d.sent);
+    bL.setAttribute('aria-pressed',String(!real));bR.setAttribute('aria-pressed',String(real));
+    stage.innerHTML=real?'<div class="art">'+d.art2+'</div><div style="font-size:1.3rem;font-weight:700;color:var(--teal);line-height:2.2">اصل معنی: '+m.mean+'</div>':'<div class="art">'+m.art+'</div><div style="font-size:1.25rem;font-weight:700;color:var(--mag);line-height:2.2">لفظی معنی (مذاق میں): '+m.lit+'</div>';
+  };
+  bL.onclick=()=>{real=false;sfx.flip();drawDemo();};
+  bR.onclick=()=>{real=true;sfx.ok();drawDemo();};
+  $('#demoNext').onclick=()=>{di=(di+1)%DEMO.length;real=false;drawDemo();};
+  drawDemo();
+  // rule 1
+  const parts=[['آنکھوں','👁️ آنکھیں'],['کا','➡️ «کا» یعنی تعلق'],['تارا','⭐ آسمان کا ستارہ']];
+  const blocks=$('#blocks'),bs=$('#blockSent');
+  parts.forEach(p=>{const b=el('button','blk',p[0]);b.type='button';b.onclick=()=>{b.classList.add('on');sfx.flip();bs.innerHTML='«'+p[0]+'» کا الگ معنی: '+p[1]+'<br>اب سب ٹکڑے جوڑیں تو بنا: «آنکھوں کا ستارہ»؟ 🤨 عجیب بات ہے!';};blocks.appendChild(b);});
+  $('#blockJoin').onclick=()=>{$$('.blk',blocks).forEach(b=>b.classList.add('on'));sfx.ok();bs.innerHTML='پورا محاورہ ایک ساتھ پڑھیں: <mark>آنکھوں کا تارا ہونا</mark> = <b>بہت لاڈلا ہونا</b> 💖';};
+  // rule 2
+  let who=0,when=0;
+  const sw=$('#selWho'),sn=$('#selWhen'),cs=$('#conjSent');
+  const drawC=()=>{
+    $$('button',sw).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===who)));
+    $$('button',sn).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===when)));
+    const w=SENTENCE_WHO[who],t=WHEN[when];
+    cs.innerHTML=t.c+' '+w.n+' <mark>بازی '+CONJ[w.g][t.k]+'</mark>۔';
+  };
+  SENTENCE_WHO.forEach((w,i)=>{const b=el('button',null,w.n);b.type='button';b.onclick=()=>{who=i;sfx.flip();drawC();};sw.appendChild(b);});
+  WHEN.forEach((w,i)=>{const b=el('button',null,w.t);b.type='button';b.onclick=()=>{when=i;sfx.flip();drawC();};sn.appendChild(b);});
+  drawC();
+  // rule 3
+  const cp=$('#cmpPlain'),ci=$('#cmpIdiom'),cm=$('#cmpSent');
+  const drawK=idi=>{cp.setAttribute('aria-pressed',String(!idi));ci.setAttribute('aria-pressed',String(idi));cm.innerHTML=idi?'چور دکان دار کی <mark>آنکھوں میں خاک ڈال کر</mark> چلا گیا۔ 😲':'چور نے دکان دار کو دھوکا دیا اور چلا گیا۔ 😐';sfx.flip();};
+  cp.onclick=()=>drawK(false);ci.onclick=()=>drawK(true);drawK(false);
+  // mini quiz
+  const items=[
+   {q:'«آنکھوں کا تارا» کا اصل مطلب کیا ہے؟',o:[{t:'بہت لاڈلا',ok:1},{t:'آنکھ میں ستارہ گر جانا'},{t:'رات کو تارے دیکھنا'},{t:'آنکھوں کی بیماری'}],ex:'محاورے کا مطلب لفظوں سے نہیں، پورے ٹکڑے سے نکلتا ہے: آنکھوں کا تارا = بہت لاڈلا۔'},
+   {q:'کون سا جملہ درست ہے؟',o:[{t:'سارہ تقریری مقابلے میں بازی لے گئی۔',ok:1},{t:'سارہ تقریری مقابلے میں بازی لے گیا۔'},{t:'سارہ تقریری مقابلے میں بازی لے جاؤں گی۔'},{t:'سارہ تقریری مقابلے میں بازی لے جاتے ہیں۔'}],ex:'فاعل مؤنث اور واحد ہے، اس لیے «لے گئی» آتا ہے۔'},
+   {q:'محاورہ ہمارے جملے کو کیسا بناتا ہے؟',o:[{t:'کم لفظوں میں زیادہ پراثر',ok:1},{t:'لمبا اور مشکل'},{t:'بالکل بے معنی'},{t:'غلط'}],ex:'محاورہ ایک چھوٹے ٹکڑے میں بڑی بات کہہ دیتا ہے۔'}
+  ];
+  quiz($('#quizLearn'),items.map(x=>({art:'',q:x.q,o:x.o,ex:x.ex})),{per:5,bump:s=>bump('learn',s),finish:()=>finish('learn'),rebuild:()=>items.map(x=>({art:'',q:x.q,o:x.o,ex:x.ex}))});
+};
+
+/* ---------- 2 cards ---------- */
+INIT.cards=function(){
+  let cat='all';
+  const tabs=$('#catTabs'),grid=$('#cardGrid');
+  const tabData=[{k:'all',t:'🌈 سب'}].concat(CATS);
+  const drawTabs=()=>{tabs.innerHTML='';tabData.forEach(c=>{const b=el('button','tab',c.t);b.type='button';b.setAttribute('aria-pressed',String(cat===c.k));b.onclick=()=>{cat=c.k;drawTabs();drawGrid();};tabs.appendChild(b);});};
+  const count=()=>{$('#learnedCount').textContent='سیکھ لیے: '+ur(S.learned.length)+' / '+ur(M.length);};
+  const drawGrid=()=>{
+    grid.innerHTML='';
+    M.filter(m=>cat==='all'||m.c===cat).forEach(m=>{
+      const c=CATS.find(x=>x.k===m.c);
+      const f=el('div','fc');f.tabIndex=0;f.setAttribute('role','button');f.setAttribute('aria-label','محاورہ: '+m.m+'۔ دبائیں تو معنی دکھائے گا۔');
+      f.style.setProperty('--s','var('+c.s+')');
+      const isL=S.learned.includes(m.id);
+      f.innerHTML='<div class="fc-in"><div class="face front">'+(isL?'<span class="learned-tag">✅</span>':'')+'<div class="art">'+m.art+'</div><h3>'+m.m+'</h3><div class="hint">دبائیں اور پلٹیں 👆</div></div><div class="face back"><div class="mean">'+m.mean+'</div><div class="lit">لفظی معنی (مذاق میں): '+m.lit+'</div><div class="ex">'+hl(m.ex)+'</div><button type="button" class="btn sm teal" style="margin-top:auto">'+(isL?'✅ سیکھ لیا':'✔ سیکھ لیا')+'</button></div></div>';
+      const flip=()=>{f.classList.toggle('flip');sfx.flip();};
+      f.addEventListener('click',e=>{if(e.target.closest('button'))return;flip();});
+      f.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target===f){e.preventDefault();flip();}});
+      $('button',f).addEventListener('click',e=>{
+        e.stopPropagation();
+        if(!S.learned.includes(m.id)){S.learned.push(m.id);save();good();hud();count();
+          e.currentTarget.textContent='✅ سیکھ لیا';const t=el('span','learned-tag','✅');$('.front',f).prepend(t);
+          if(S.learned.length>=M.length){finish('cards');confetti(140);sfx.win();say('واہ! آپ نے سارے ۲۸ محاورے سیکھ لیے!');}}
+      });
+      grid.appendChild(f);
+    });
+  };
+  drawTabs();drawGrid();count();
+  RESHOW.cards=()=>{count();};
+};
+
+/* ---------- 3 picture ---------- */
+INIT.picture=function(){
+  const build=()=>PIC.map(p=>{const m=BY[p.a];return{art:p.art,q:p.s,o:[{t:m.m,ok:1}].concat(p.d.map(d=>({t:BY[d].m}))),ex:'<b>'+m.m+'</b> کا مطلب ہے: '+m.mean+'۔'};});
+  quiz($('#quizPicture'),shuffle(build()),{per:10,bump:s=>bump('picture',s),finish:()=>finish('picture'),rebuild:()=>shuffle(build())});
+};
+
+/* ---------- 4 match ---------- */
+INIT.match=function(){
+  let r=0,first=null,lock=false,moves=0,pairs=0;
+  const tabs=$('#roundTabs'),grid=$('#mGrid'),res=$('#mResult');
+  const drawTabs=()=>{tabs.innerHTML='';ROUNDS.forEach((_,i)=>{const b=el('button','tab','دور '+ur(i+1)+(S.mr[i]?' ✓':''));b.type='button';b.setAttribute('aria-pressed',String(i===r));b.onclick=()=>start(i);tabs.appendChild(b);});};
+  const stat=()=>{$('#mMoves').textContent='چالیں: '+ur(moves);$('#mPairs').textContent='جوڑیاں: '+ur(pairs)+' / '+ur(ROUNDS[r].length);};
+  function start(i){
+    r=i;first=null;lock=false;moves=0;pairs=0;res.hidden=true;drawTabs();stat();grid.innerHTML='';
+    const cards=[];ROUNDS[i].forEach(id=>{cards.push({id,k:'m',t:BY[id].m});cards.push({id,k:'d',t:BY[id].mean});});
+    shuffle(cards).forEach(c=>{
+      const b=el('button','mc');b.type='button';b.setAttribute('aria-label','کارڈ');
+      b.innerHTML='<div class="mc-in"><div class="f">❓</div><div class="b '+c.k+'">'+esc(c.t)+'</div></div>';
+      b.onclick=()=>{
+        if(lock||b.classList.contains('up')||b.classList.contains('ok'))return;
+        b.classList.add('up');sfx.flip();
+        if(!first){first={b,c};return;}
+        moves++;const a=first;first=null;lock=true;
+        if(a.c.id===c.id&&a.c.k!==c.k){
+          setTimeout(()=>{a.b.classList.replace('up','ok');b.classList.replace('up','ok');pairs++;good();stat();lock=false;if(pairs===ROUNDS[r].length)won();},450);
+        }else{
+          setTimeout(()=>{a.b.classList.remove('up');b.classList.remove('up');bad();lock=false;},950);
+        }
+        stat();
+      };
+      grid.appendChild(b);
+    });
+  }
+  function won(){
+    const bonus=moves<=10?6:moves<=14?3:0,sc=pairs*4+bonus;
+    S.mr[r]=Math.max(S.mr[r]||0,sc);
+    bump('match',ROUNDS.reduce((a,_,i)=>a+(S.mr[i]||0),0));
+    sfx.win();confetti(90);
+    const all=ROUNDS.every((_,i)=>S.mr[i]);if(all)finish('match');
+    res.hidden=false;
+    res.innerHTML='<b>شاباش! دور مکمل۔</b> '+ur(moves)+' چالوں میں ۔ پوائنٹس: '+ur(sc)+(bonus?' (اضافی '+ur(bonus)+' ⭐ بونس)':'')+'<div class="row" style="margin-top:8px"><button class="btn sm" type="button" id="mNext">'+(r<ROUNDS.length-1?'اگلا دور ⟵':'🔁 دوبارہ')+'</button></div>';
+    $('#mNext').onclick=()=>start(r<ROUNDS.length-1?r+1:0);
+    drawTabs();
+  }
+  start(0);
+};
+
+/* ---------- 5 balloon ---------- */
+INIT.balloon=function(){
+  const box=$('#balGame');
+  function play(){
+    const qs=shuffle(M).slice(0,8);let qi=0,lives=3,score=0;
+    const q=()=>{
+      const it=qs[qi];let mis=0;
+      const opts=shuffle([it].concat(shuffle(M.filter(x=>x.id!==it.id)).slice(0,3)));
+      box.innerHTML='';
+      box.appendChild(el('div','qhead','<span class="pill">غبارہ '+ur(qi+1)+' / '+ur(qs.length)+'</span><span class="hearts" aria-label="باقی جانیں">'+'❤️'.repeat(lives)+'🖤'.repeat(3-lives)+'</span><span class="pill">⭐ '+ur(score)+'</span>'));
+      box.appendChild(el('p','sub','اس معنی والا محاورہ کون سا ہے؟ صحیح غبارے پر دبائیں!'));
+      box.appendChild(el('div','cloud','☁️ '+it.mean));
+      const sky=el('div','sky');
+      opts.forEach((o,i)=>{
+        const b=el('button','bal b'+(i+1),esc(o.m));b.type='button';
+        b.onclick=()=>{
+          if(o.id===it.id){
+            sfx.pop();b.classList.add('pop');$$('.bal',sky).forEach(x=>x.disabled=true);
+            const gain=mis===0?10:mis===1?5:0;score+=gain;bump('balloon',score);confetti(40);say(pick(CHEER));
+            setTimeout(()=>{qi++;qi<qs.length?q():end();},900);
+          }else{
+            mis++;lives--;b.classList.add('wrong');b.disabled=true;sfx.no();say(pick(OOPS));
+            $('.hearts',box).textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+            if(lives<=0)setTimeout(over,700);
+          }
+        };
+        sky.appendChild(b);
+      });
+      box.appendChild(sky);
+    };
+    const end=()=>{finish('balloon');sfx.win();confetti(120);box.innerHTML='<div class="res"><div class="big">🎈🎉🎈</div><h3>سب غبارے پھوڑ دیے! پوائنٹس: '+ur(score)+' / ۸۰</h3></div>';again();};
+    const over=()=>{box.innerHTML='<div class="res"><div class="big">💔</div><h3>جانیں ختم ہو گئیں! پوائنٹس: '+ur(score)+'</h3><p class="sub">گیلری میں محاورے دوبارہ دیکھیں اور پھر کوشش کریں۔</p></div>';again();};
+    const again=()=>{const r=el('div','row c');r.style.marginTop='12px';const a=el('button','btn','🔁 دوبارہ کھیلیں');a.type='button';a.onclick=play;const b=el('button','btn alt','🗺️ نقشہ');b.type='button';b.onclick=()=>show('home');r.append(a,b);box.appendChild(r);};
+    q();
+  }
+  play();
+};
+
+/* ---------- 6 builder ---------- */
+INIT.builder=function(){
+  const box=$('#bldGame');
+  function play(){
+    const ids=shuffle(BUILD);let i=0,score=0;
+    const q=()=>{
+      const m=BY[ids[i]],words=m.m.split(' ');let order,tries=0;
+      do{order=shuffle(words.map((w,k)=>k));}while(words.length>2&&order.join()===words.map((w,k)=>k).join());
+      let ans=[],locked=false;
+      box.innerHTML='';
+      box.appendChild(el('div','qhead','<span class="pill">محاورہ '+ur(i+1)+' / '+ur(ids.length)+'</span><span class="pill">⭐ '+ur(score)+'</span>'));
+      box.appendChild(el('div','art',m.art));
+      box.appendChild(el('div','qtext','اشارہ: جس کا مطلب ہے <mark>'+m.mean+'</mark>'));
+      const slots=el('div','slots');slots.setAttribute('aria-label','آپ کا جواب');
+      const pool=el('div','pool');
+      const fb=el('div','fb');fb.hidden=true;
+      const nx=el('button','btn',i<ids.length-1?'اگلا ⟵':'نتیجہ 🏁');nx.type='button';nx.hidden=true;
+      const draw=()=>{
+        slots.innerHTML='';pool.innerHTML='';
+        if(!ans.length)slots.appendChild(el('span','sub','الفاظ پر دبا کر یہاں ترتیب سے رکھیں 👇'));
+        ans.forEach(k=>{const b=el('button','w',esc(words[k]));b.type='button';b.onclick=()=>{if(locked)return;ans=ans.filter(x=>x!==k);sfx.flip();draw();};slots.appendChild(b);});
+        order.filter(k=>!ans.includes(k)).forEach(k=>{const b=el('button','w',esc(words[k]));b.type='button';b.onclick=()=>{if(locked)return;ans.push(k);sfx.flip();draw();if(ans.length===words.length)check();};pool.appendChild(b);});
+      };
+      const check=()=>{
+        const t=ans.map(k=>words[k]).join(' ');
+        if(t===m.m){
+          locked=true;slots.classList.add('good');const gain=tries===0?10:tries===1?5:0;score+=gain;bump('builder',score);good();confetti(50);
+          fb.innerHTML=(gain?'<b>+'+ur(gain)+' ⭐</b> ':'')+'درست! <b>'+m.m+'</b> = '+m.mean+'۔';fb.hidden=false;nx.hidden=false;
+        }else{
+          tries++;slots.classList.remove('bad');void slots.offsetWidth;slots.classList.add('bad');bad();
+          fb.innerHTML='ترتیب ٹھیک نہیں۔ کسی لفظ پر دبا کر اسے ہٹائیں اور دوبارہ رکھیں۔';fb.hidden=false;
+        }
+      };
+      nx.onclick=()=>{i++;i<ids.length?q():end();};
+      const rs=el('button','btn alt sm','↺ دوبارہ ترتیب');rs.type='button';rs.onclick=()=>{if(locked)return;ans=[];fb.hidden=true;draw();};
+      box.append(slots,pool,fb);
+      const r=el('div','row c');r.style.marginTop='12px';r.append(rs,nx);box.appendChild(r);
+      draw();
+    };
+    const end=()=>{finish('builder');sfx.win();confetti(120);box.innerHTML='<div class="res"><div class="big">🧱🏗️✨</div><h3>پوائنٹس: '+ur(score)+' / ۷۰</h3><p class="sub">'+(score>=63?'ماشاءاللہ! آپ تو معمار نکلے!':'اچھا کام! دوبارہ کھیل کر بہتر کریں۔')+'</p></div>';const r=el('div','row c');const a=el('button','btn','🔁 دوبارہ کھیلیں');a.type='button';a.onclick=play;const b=el('button','btn alt','🗺️ نقشہ');b.type='button';b.onclick=()=>show('home');r.append(a,b);box.appendChild(r);};
+    q();
+  }
+  play();
+};
+
+/* ---------- 7 fill ---------- */
+INIT.fill=function(){
+  const build=()=>FILL.map(f=>{
+    const m=BY[f.id];
+    return{art:f.art,q:esc(f.s).replace('____','<span class="gap"></span>'),after:esc(f.s).replace('____','<mark>'+esc(f.a)+'</mark>'),o:[{t:f.a,ok:1}].concat(f.o.map(t=>({t}))),ex:'<b>'+m.m+'</b> = '+m.mean+'۔ جملے کے مطابق فعل کی صحیح شکل چننا ضروری ہے۔'};
+  });
+  quiz($('#quizFill'),shuffle(build()),{per:10,bump:s=>bump('fill',s),finish:()=>finish('fill'),rebuild:()=>shuffle(build())});
+};
+
+/* ---------- 8 story ---------- */
+INIT.story=function(){
+  const tx=$('#storyText'),pk=$('#picker'),po=$('#pickOpts'),pl=$('#pickLabel'),dn=$('#storyDone');
+  let cur=-1,score=0,mis=STORY.b.map(()=>0),filled=STORY.b.map(()=>false);
+  tx.innerHTML=STORY.t.replace(/\[\[(\d)\]\]/g,(_,n)=>'<button type="button" class="blank" data-b="'+(n-1)+'" aria-label="خالی خانہ '+n+'">'+ur(n)+' ❓</button>');
+  tx.onclick=e=>{
+    const b=e.target.closest('.blank');if(!b||b.classList.contains('filled'))return;
+    cur=+b.dataset.b;$$('.blank',tx).forEach(x=>x.classList.toggle('cur',x===b));
+    pl.textContent='خانہ '+ur(cur+1)+' کے لیے صحیح محاورہ چنیں:';po.innerHTML='';pk.hidden=false;
+    const d=STORY.b[cur];
+    shuffle([{t:d.a,ok:1}].concat(d.o.map(t=>({t})))).forEach(op=>{
+      const x=el('button','opt',esc(op.t));x.type='button';
+      x.onclick=()=>{
+        if(op.ok){
+          filled[cur]=true;const gain=mis[cur]===0?10:mis[cur]===1?5:0;score+=gain;bump('story',score);good();
+          b.textContent=op.t;b.classList.remove('cur');b.classList.add('filled');pk.hidden=true;
+          if(filled.every(Boolean)){finish('story');sfx.win();confetti(130);dn.hidden=false;dn.innerHTML='<b>🎉 کہانی مکمل! پوائنٹس: '+ur(score)+' / ۸۰۔</b> اب ایک بار پوری کہانی بلند آواز میں پڑھیں۔ <button class="btn sm" type="button" id="stRe">🔁 دوبارہ</button>';$('#stRe').onclick=()=>{INIT.story();dn.hidden=true;pk.hidden=true;};dn.scrollIntoView({behavior:'smooth',block:'nearest'});}
+        }else{mis[cur]++;x.disabled=true;x.classList.add('no');bad();}
+      };
+      po.appendChild(x);
+    });
+    pk.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+};
+
+/* ---------- 9 worksheet ---------- */
+const FKEYS=[];
+function wsField(k,html){FKEYS.push(k);return html;}
+INIT.sheet=function(){
+  const P=$('#paper');
+  let h='<h2 style="text-align:center">محاورات کی ورک شیٹ</h2><p class="sub" style="text-align:center">جماعت ہفتم · اردو · محاورات کا استعمال</p><div class="band" style="margin:8px 0" aria-hidden="true"></div>';
+  h+='<div class="top"><label class="fld">نام<input id="w-name" data-k="name" type="text" maxlength="40"></label><label class="fld">جماعت / سیکشن<input id="w-cls" data-k="cls" type="text" maxlength="20" placeholder="ہفتم"></label><label class="fld">تاریخ<input id="w-date" data-k="date" type="date"></label></div>';
+  h+='<p class="sub">کل نمبر: ۴۰ (+ ۵ اضافی) · میلے کے پوائنٹس: <b id="w-pts"></b> · لقب: <b id="w-rank"></b></p>';
+  WS.forEach(sec=>{
+    h+='<div class="sec"><h3><span>'+sec.t+'</span><small>'+(sec.bonus?'اضافی ':'')+ur(sec.marks)+' نمبر</small></h3><div class="ins">'+sec.ins+'</div>';
+    if(sec.bank)h+='<div class="bank">'+shuffle(sec.bank).map(b=>'<span>'+b+'</span>').join('')+'</div>';
+    if(sec.type==='gap')sec.qs.forEach((q,i)=>{const k=sec.k+(i+1);h+='<div class="q"><b>'+ur(i+1)+'۔</b><div class="qt">'+esc(q).replace('____','<input class="gapin" type="text" data-k="'+k+'" aria-label="جواب '+ur(i+1)+'">')+'</div></div>';});
+    if(sec.type==='match'){const ms=shuffle(sec.pairs.map(p=>p[1]));sec.pairs.forEach((p,i)=>{const k=sec.k+(i+1);h+='<div class="qb"><div class="q"><b>'+ur(i+1)+'۔</b><div class="qt">'+p[0]+'</div></div><select class="ws-sel" data-k="'+k+'" aria-label="معنی"><option value="">— معنی منتخب کریں —</option>'+ms.map(x=>'<option>'+x+'</option>').join('')+'</select></div>';});}
+    if(sec.type==='line')sec.qs.forEach((q,i)=>{const k=sec.k+(i+1);h+='<div class="qb"><div class="q"><b>'+ur(i+1)+'۔</b><div class="qt">'+q+'</div></div><input class="ws-in" type="text" data-k="'+k+'" aria-label="معنی"></div>';});
+    if(sec.type==='area')sec.qs.forEach((q,i)=>{const k=sec.k+(i+1);h+='<div class="q" style="flex-direction:column;align-items:stretch"><div><b style="color:var(--mag)">'+ur(i+1)+'۔</b> <mark>'+q+'</mark></div><textarea class="ws-ta" rows="2" data-k="'+k+'" aria-label="جملہ"></textarea></div>';});
+    if(sec.type==='tf')sec.qs.forEach((q,i)=>{const k=sec.k+(i+1);h+='<div class="qb"><div class="q"><b>'+ur(i+1)+'۔</b><div class="qt">'+q+'</div></div><select class="ws-sel" data-k="'+k+'" aria-label="جواب"><option value="">— منتخب کریں —</option><option>صحیح</option><option>غلط</option></select></div>';});
+    if(sec.type==='story')h+='<textarea class="ws-ta" rows="8" data-k="F1" id="w-story" aria-label="کہانی"></textarea><div class="counter" id="w-count"></div>';
+    if(sec.type==='draw')h+='<div class="qb"><div class="q"><div class="qt">میرا محاورہ:</div></div><select class="ws-sel" data-k="G1" aria-label="محاورہ">'+'<option value="">— محاورہ چنیں —</option>'+M.map(m=>'<option>'+m.m+'</option>').join('')+'</select></div><textarea class="ws-ta" rows="4" data-k="G2" aria-label="تصویر کا بیان" style="margin-top:8px"></textarea>';
+    h+='</div>';
+  });
+  P.innerHTML=h;
+  // restore + autosave
+  const date=$('#w-date');
+  $$('[data-k]',P).forEach(f=>{
+    const k=f.dataset.k;let v=S.ws[k];
+    if(k==='name'&&!v)v=S.name;
+    if(k==='date'&&!v){const d=new Date();v=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+    if(k==='cls'&&!v)v='ہفتم';
+    if(v!=null)f.value=v;
+    f.addEventListener('input',()=>{S.ws[k]=f.value;if(k==='name'&&f.value.trim()){S.name=f.value.trim();}save();if(k==='F1')cnt();});
+    S.ws[k]=f.value;
+  });
+  $('#w-pts').textContent=ur(total());$('#w-rank').textContent=rank();
+  function cnt(){
+    const t=($('#w-story').value||'').replace(/ي/g,'ی').replace(/ك/g,'ک');
+    const n=STEMS.filter(s=>t.includes(s)).length,c=$('#w-count');
+    c.textContent=(n>=3?'✅ ':'✍️ ')+'اب تک '+ur(n)+' محاورے استعمال ہوئے (کم از کم ۳ ضروری)۔';c.classList.toggle('okc',n>=3);
+  }
+  cnt();
+  RESHOW.sheet=()=>{$('#w-pts').textContent=ur(total());$('#w-rank').textContent=rank();};
+};
+RESHOW.sheet=()=>{};
+
+/* ---------- worksheet export ---------- */
+function lines(){
+  const g=k=>(S.ws[k]||'').trim();
+  const L=[];
+  L.push({k:'title',t:'محاورات کی ورک شیٹ'});
+  L.push({k:'sub',t:'جماعت ہفتم · اردو · محاورات کا استعمال'});
+  let dt=g('date');try{if(dt)dt=new Date(dt+'T00:00:00').toLocaleDateString('ur-PK',{year:'numeric',month:'long',day:'numeric'});}catch(e){}
+  L.push({k:'info',t:'نام: '+(g('name')||'.............')+'      جماعت / سیکشن: '+(g('cls')||'.......')+'      تاریخ: '+(dt||'.......')});
+  L.push({k:'info',t:'کل نمبر: ۴۰ (+ ۵ اضافی)      میلے کے پوائنٹس: '+ur(total())+'      لقب: '+rank().replace(/^\S+\s/,'')});
+  WS.forEach(sec=>{
+    L.push({k:'h',t:sec.t+'  ('+(sec.bonus?'اضافی ':'')+ur(sec.marks)+' نمبر)'});
+    if(sec.bank)L.push({k:'note',t:'محاورے: '+sec.bank.join(' ، ')});
+    const A=(k)=>g(k)||'.....................................';
+    if(sec.type==='gap')sec.qs.forEach((q,i)=>{const a=g(sec.k+(i+1));L.push({k:'q',t:ur(i+1)+'۔ '+q.replace('____',a?'«'+a+'»':'__________')});});
+    if(sec.type==='match')sec.pairs.forEach((p,i)=>{L.push({k:'q',t:ur(i+1)+'۔ '+p[0]});L.push({k:'a',t:'معنی: '+A(sec.k+(i+1))});});
+    if(sec.type==='line')sec.qs.forEach((q,i)=>{L.push({k:'q',t:ur(i+1)+'۔ '+q});L.push({k:'a',t:'معنی: '+A(sec.k+(i+1))});});
+    if(sec.type==='area')sec.qs.forEach((q,i)=>{L.push({k:'q',t:ur(i+1)+'۔ '+q});L.push({k:'a',t:'جملہ: '+A(sec.k+(i+1))});});
+    if(sec.type==='tf')sec.qs.forEach((q,i)=>{L.push({k:'q',t:ur(i+1)+'۔ '+q});L.push({k:'a',t:'جواب: '+A(sec.k+(i+1))});});
+    if(sec.type==='story')L.push({k:'a',t:g('F1')||'.....................................................................'});
+    if(sec.type==='draw'){L.push({k:'q',t:'میرا محاورہ: '+(g('G1')||'..............')});L.push({k:'a',t:g('G2')||'.....................................................................'});}
+  });
+  return L;
+}
+const xe=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function docxBlob(){
+  const F='Jameel Noori Nastaleeq';
+  const run=(t,o)=>{o=o||{};const parts=String(t).split('\n').map(x=>'<w:t xml:space="preserve">'+xe(x)+'</w:t>').join('<w:br/>');
+    return '<w:r><w:rPr><w:rFonts w:ascii="'+F+'" w:hAnsi="'+F+'" w:cs="'+F+'"/>'+(o.b?'<w:b/><w:bCs/>':'')+'<w:color w:val="'+(o.c||'1E1450')+'"/><w:sz w:val="'+(o.s||28)+'"/><w:szCs w:val="'+(o.s||28)+'"/><w:rtl/></w:rPr>'+parts+'</w:r>';};
+  const para=(t,o)=>{o=o||{};return '<w:p><w:pPr>'+(o.fill?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.fill+'"/>':'')+'<w:bidi/><w:spacing w:before="'+(o.before||0)+'" w:after="'+(o.after||100)+'" w:line="'+(o.line||420)+'" w:lineRule="auto"/>'+(o.ind?'<w:ind w:start="'+o.ind+'" w:right="0"/>':'')+(o.jc?'<w:jc w:val="'+o.jc+'"/>':'')+'</w:pPr>'+run(t,o)+'</w:p>';};
+  const body=lines().map(x=>{
+    switch(x.k){
+      case 'title':return para(x.t,{b:1,s:44,c:'5A3FD0',jc:'center',after:40});
+      case 'sub':return para(x.t,{s:26,jc:'center',c:'51498A',after:160});
+      case 'info':return para(x.t,{s:26,after:80});
+      case 'h':return para(x.t,{b:1,s:30,fill:'FFE9A8',before:240,after:100});
+      case 'note':return para(x.t,{s:24,c:'51498A',after:80});
+      case 'q':return para(x.t,{s:27,after:40});
+      case 'a':return para(x.t,{s:27,c:'1F3FB0',ind:360,after:120});
+    }
+    return '';
+  }).join('');
+  const doc='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+body+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1000" w:right="1100" w:bottom="1000" w:left="1100" w:header="708" w:footer="708" w:gutter="0"/><w:bidi/></w:sectPr></w:body></w:document>';
+  const z=new JSZip();
+  z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',{createFolders:false});
+  z.file('_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',{createFolders:false});
+  z.file('word/document.xml',doc,{createFolders:false});
+  return z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+let DL=null;
+try{if(window.claude&&window.claude.use)window.claude.use('downloads').then(x=>{DL=x;}).catch(()=>{});}catch(e){}
+/* ---------- PDF export (worksheet drawn on canvas, then packed into a PDF) ---------- */
+const PFONT='"Jameel Noori Nastaleeq","Noto Nastaliq Urdu","Noto Naskh Arabic",serif';
+function wrapText(ctx,text,maxW){
+  const words=text.split(/\s+/).filter(Boolean),out=[];let cur='';
+  for(const w of words){const t=cur?cur+' '+w:w;if(cur&&ctx.measureText(t).width>maxW){out.push(cur);cur=w;}else cur=t;}
+  if(cur)out.push(cur);return out.length?out:[''];
+}
+async function pdfBlob(){
+  try{await Promise.all(['400','700'].map(w=>document.fonts.load(w+' 26px "Noto Nastaliq Urdu"')));}catch(e){}
+  const W=794,H=1123,SC=2,M=44,pages=[];
+  let cv,ctx,y,pn=0;
+  const stripe=['#E5266E','#FFB703','#00A896','#5A3FD0'];
+  const setF=(size,bold)=>{ctx.font=(bold?'700 ':'400 ')+size+'px '+PFONT;ctx.direction='rtl';ctx.textBaseline='alphabetic';};
+  function newPage(){
+    if(cv)pages.push(cv);
+    cv=document.createElement('canvas');cv.width=W*SC;cv.height=H*SC;ctx=cv.getContext('2d');ctx.scale(SC,SC);
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);pn++;
+    for(let x=0,i=0;x<W;x+=26,i++){ctx.fillStyle=stripe[i%4];ctx.fillRect(x,0,26,12);}
+    ctx.strokeStyle='#1E1450';ctx.lineWidth=2.5;ctx.strokeRect(24,24,W-48,H-48);
+    setF(15,false);ctx.fillStyle='#51498A';ctx.textAlign='center';
+    ctx.fillText('محاورہ میلہ  ·  صفحہ '+ur(pn),W/2,H-30);
+    y=M+14;
+  }
+  function block(text,o){
+    o=o||{};const size=o.size||26,ind=o.ind||0,fill=o.fill;
+    if(!cv)newPage();
+    setF(size,o.bold);
+    const maxW=W-2*M-ind-(fill?30:0);
+    let ls=[];String(text).split('\n').forEach(p=>ls.push(...wrapText(ctx,p,maxW)));
+    const m=ctx.measureText('م');
+    const asc=m.fontBoundingBoxAscent||size*1.1,desc=m.fontBoundingBoxDescent||size*.9;
+    const lh=Math.min(Math.max(asc+desc,size*1.75),size*2.6);
+    const pad=fill?10:0,h=ls.length*lh+pad*2;
+    if(y+(o.before||0)+Math.min(h,lh*3+pad*2)>H-M-34){newPage();}
+    y+=o.before||0;
+    if(y+h>H-M-34&&ls.length>3){ // split long blocks across pages
+      let i=0;
+      while(i<ls.length){
+        const room=Math.floor((H-M-34-y)/lh);
+        if(room<1){newPage();continue;}
+        drawLines(ls.slice(i,i+room),lh,asc,desc,size,o,ind,fill,0);
+        i+=room;if(i<ls.length)newPage();
+      }
+    }else drawLines(ls,lh,asc,desc,size,o,ind,fill,pad);
+    y+=(o.after==null?6:o.after);
+  }
+  function drawLines(ls,lh,asc,desc,size,o,ind,fill,pad){
+    const h=ls.length*lh+pad*2;
+    if(fill){ctx.fillStyle=fill;ctx.strokeStyle='#1E1450';ctx.lineWidth=2.5;ctx.beginPath();ctx.roundRect(M,y,W-2*M,h,12);ctx.fill();ctx.stroke();}
+    setF(size,o.bold);ctx.fillStyle=o.color||'#1E1450';
+    ls.forEach((t,i)=>{
+      const base=y+pad+i*lh+(lh-(asc+desc))/2+asc;
+      if(o.align==='center'){ctx.textAlign='center';ctx.fillText(t,W/2,base);}
+      else{ctx.textAlign='right';ctx.fillText(t,W-M-ind-(fill?14:0),base);}
+      if(o.rule){ctx.strokeStyle='#B9B4D9';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(M,base+desc*.55);ctx.lineTo(W-M-ind,base+desc*.55);ctx.stroke();ctx.setLineDash([]);}
+    });
+    y+=h;
+  }
+  newPage();
+  lines().forEach(x=>{
+    switch(x.k){
+      case 'title':block(x.t,{size:40,bold:1,color:'#5A3FD0',align:'center',after:0});break;
+      case 'sub':block(x.t,{size:20,color:'#51498A',align:'center',after:8});break;
+      case 'info':block(x.t,{size:22,after:2});break;
+      case 'h':block(x.t,{size:25,bold:1,fill:'#FFE9A8',before:14,after:8});break;
+      case 'note':block(x.t,{size:20,color:'#51498A',after:4});break;
+      case 'q':block(x.t,{size:24,after:0});break;
+      case 'a':block(x.t,{size:24,color:'#1F3FB0',ind:26,rule:1,after:8});break;
+    }
+  });
+  pages.push(cv);
+  const jpgs=[];
+  for(const c of pages){
+    const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.9));
+    jpgs.push({d:new Uint8Array(await b.arrayBuffer()),w:c.width,h:c.height});
+  }
+  return makePdf(jpgs);
+}
+function makePdf(imgs){
+  const enc=new TextEncoder(),chunks=[],offs=[];let pos=0;
+  const push=x=>{const b=typeof x==='string'?enc.encode(x):x;chunks.push(b);pos+=b.length;};
+  push('%PDF-1.4\n');
+  const obj=(id,body,stream)=>{offs[id]=pos;push(id+' 0 obj\n'+body);if(stream){push('\nstream\n');push(stream);push('\nendstream');}push('\nendobj\n');};
+  const n=imgs.length,kids=imgs.map((_,i)=>(3+3*i)+' 0 R').join(' ');
+  obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2,'<< /Type /Pages /Kids ['+kids+'] /Count '+n+' >>');
+  imgs.forEach((im,i)=>{
+    const p=3+3*i,c=p+1,x=p+2,cs='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+    obj(p,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 '+x+' 0 R >> >> /Contents '+c+' 0 R >>');
+    obj(c,'<< /Length '+cs.length+' >>',enc.encode(cs));
+    obj(x,'<< /Type /XObject /Subtype /Image /Width '+im.w+' /Height '+im.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+im.d.length+' >>',im.d);
+  });
+  const xr=pos,total=3+3*n;
+  push('xref\n0 '+total+'\n0000000000 65535 f \n');
+  for(let i=1;i<total;i++)push(String(offs[i]).padStart(10,'0')+' 00000 n \n');
+  push('trailer\n<< /Size '+total+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');
+  return new Blob(chunks,{type:'application/pdf'});
+}
+const dm=t=>{$('#dlMsg').textContent=t;};
+async function saveFile(name,makeBlob,okMsg){
+  try{
+    dm('فائل تیار ہو رہی ہے…');
+    const blob=await makeBlob();
+    if(DL){await DL.save({filename:name,data:blob});}
+    else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);}
+    dm(okMsg);S.done.sheet=true;save();hud();sfx.win();confetti(100);say('ورک شیٹ مکمل! شاباش!');
+  }catch(e){
+    dm(e&&e.code==='declined'?'آپ نے محفوظ کرنے سے منع کیا۔ جب چاہیں دوبارہ بٹن دبائیں۔':'ڈاؤن لوڈ نہیں ہو سکا۔ «متن کاپی کریں» استعمال کریں۔');
+  }
+}
+$('#dlBtn').addEventListener('click',()=>saveFile('Muhawraat_Worksheet.pdf',pdfBlob,'✅ آپ کی ورک شیٹ PDF میں محفوظ ہو گئی!'));
+$('#docBtn').addEventListener('click',()=>{
+  if(typeof JSZip==='undefined'){dm('Word فائل بنانے والا حصہ لوڈ نہیں ہوا۔ PDF استعمال کریں۔');return;}
+  saveFile('Muhawraat_Worksheet.docx',docxBlob,'✅ Word فائل محفوظ ہو گئی! اسے ایڈٹ بھی کر سکتے ہیں۔');
+});
+$('#copyBtn').addEventListener('click',async()=>{
+  const t=lines().map(x=>x.t).join('\n');
+  try{await navigator.clipboard.writeText(t);dm('✅ متن کاپی ہو گیا۔ اب Word یا کسی نوٹ میں پیسٹ کریں۔');}
+  catch(e){const ta=el('textarea');ta.value=t;ta.className='ws-ta';ta.rows=8;$('#dlMsg').innerHTML='';$('#dlMsg').appendChild(ta);ta.select();dm&&0;}
+});
+
+/* ---------- bunting for hero ---------- */
+(function(){
+  const g=$('#bunt');if(!g)return;const NS='http://www.w3.org/2000/svg';
+  const cols=['#E5266E','#FFB703','#00A896','#5A3FD0','#E63B2E','#2BA3F0'];
+  const curves=[[0,20,225,100,450,48],[450,48,675,100,900,20]];let ci=0;
+  curves.forEach(c=>{
+    const p=document.createElementNS(NS,'path');p.setAttribute('d','M'+c[0]+' '+c[1]+' Q'+c[2]+' '+c[3]+' '+c[4]+' '+c[5]);p.setAttribute('fill','none');p.setAttribute('stroke','#1E1450');p.setAttribute('stroke-width','3');g.appendChild(p);
+    for(let t=.06;t<1;t+=.075){
+      const x=(1-t)*(1-t)*c[0]+2*(1-t)*t*c[2]+t*t*c[4],y=(1-t)*(1-t)*c[1]+2*(1-t)*t*c[3]+t*t*c[5];
+      const f=document.createElementNS(NS,'polygon');f.setAttribute('points',(x-13)+','+y+' '+(x+13)+','+y+' '+x+','+(y+30));f.setAttribute('fill',cols[ci++%cols.length]);f.setAttribute('stroke','#1E1450');f.setAttribute('stroke-width','2.5');f.setAttribute('stroke-linejoin','round');g.appendChild(f);
+    }
+  });
+})();
+
+hud();
+show(location.hash.slice(1)||'home',true);
+})();
+
+</script>
